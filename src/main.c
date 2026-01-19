@@ -69,7 +69,7 @@ void draw_slingshot() {
 
 void render(State* st) {
   // idea: e^(-f(x)^2) where f(x) = max(x+a, 0) + min(x-a,0)
-  float theta = st->cloud_lower_t*2.0*3.141592;
+  float theta = st->cloud_lower_t*2.0*M_PI;
 
   int lower_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(theta);
   int upper_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(1.6+theta);
