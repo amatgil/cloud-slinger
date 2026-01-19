@@ -4,6 +4,8 @@
 struct Ball {
   int x;
   int y;
+  int vel_x;
+  int vel_y;
   struct Ball* next;
 };
 
