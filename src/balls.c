@@ -1,8 +1,10 @@
+#ifndef _BALLS_H
+#define _BALLS_H
 
-typedef struct {
-  float x;
-  float y;
-  Ball* next;
-} Ball;
+struct Ball {
+  int x;
+  int y;
+  struct Ball* next;
+};
 
-Ball
+#endif
