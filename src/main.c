@@ -6,6 +6,7 @@
 
 #define CLOUD_WIDTH  120
 #define CLOUD_HEIGHT 25
+// CLOUD_{LOWER, UPPER}_Y are percentages of screenheight
 #define CLOUD_LOWER_Y 0.15
 #define CLOUD_UPPER_Y 0.35
 #define CLOUD_DT 0.1
@@ -21,13 +22,13 @@
 float DeltaTime;
 
 typedef struct {
-  float cloud_lower_t; // how far along movement, [0..1)
-  float cloud_upper_t; // how far along movement, [0..1)
+  float cloud_t; // how far along movement, [0..1)
   struct Ball* balls;
+  Vector2 held_position; // (-1, -1) si no està held
 } State ;
 
 State new_state() {
-  return (State){0.0, 0.0, NULL};
+  return (State){0.0, NULL, (Vector2){0.0, 0.0} };
 }
 
 void add_ball(State* st, int ball_x, int ball_y, int ball_vel_x, int ball_vel_y) {
@@ -67,24 +68,31 @@ void draw_slingshot() {
                 BLUE);
 }
 
+void draw_mouse_circle() {
+  Vector2 pos = GetMousePosition();   
+  DrawCircle(pos.x, pos.y, BALL_RADIUS, WHITE);
+}
+
+void update(State* st) {
+  // t = fract(t+DT*dt)
+  st->cloud_t += CLOUD_DT*DeltaTime;
+  st->cloud_t = st->cloud_t - (float)(int)st->cloud_t;
+}
+
 void render(State* st) {
   // idea: e^(-f(x)^2) where f(x) = max(x+a, 0) + min(x-a,0)
-  float theta = st->cloud_lower_t*2.0*M_PI;
+  float theta = st->cloud_t*2.0*M_PI;
 
-  int lower_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(theta);
-  int upper_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(1.6+theta);
-  st->cloud_lower_t += CLOUD_DT*DeltaTime;
-  st->cloud_upper_t += CLOUD_DT*DeltaTime;
-
-  st->cloud_lower_t = st->cloud_lower_t - (float)(int)st->cloud_lower_t;
-  st->cloud_upper_t = st->cloud_upper_t - (float)(int)st->cloud_upper_t;
-
+  float lower_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(theta);
+  float upper_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(1.6+theta);
   float screen_h = (float)GetScreenHeight();
+
   DrawRectangle(lower_x, (int)(screen_h*CLOUD_LOWER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, WHITE);
   DrawRectangle(upper_x, (int)(screen_h*CLOUD_UPPER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, WHITE);
 
 
   draw_slingshot();
+  draw_mouse_circle();
 
   struct Ball* ball = st->balls;
   while (ball) {
@@ -109,6 +117,7 @@ int main(void) {
     DeltaTime = GetFrameTime();
     BeginDrawing();
     ClearBackground(BLACK);
+    update(&st);
     render(&st);
     EndDrawing();
   }
