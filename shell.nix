@@ -6,12 +6,6 @@ let
   packages = with pkgs; [
     gcc
     gnumake
-    #indent
-    #man-pages man-pages-posix
-
-    cmake
-    libGL
-    pkg-config
 
     # X11 dependencies
     xorg.libX11
@@ -23,10 +17,6 @@ let
     #emscripten # web support
     
     raylib
-
-    #clang-tools
-    #valgrind
-    #gdb
   ];
 in
 pkgs.mkShell {
