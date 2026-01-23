@@ -1,5 +1,4 @@
-#ifndef _DRAW_H
-#define _DRAW_H
+#pragma once
 
 #include <raylib.h>
 #include <raymath.h>
@@ -7,7 +6,7 @@
 #include <sys/param.h>
 #include "definitions.c"
 #include "constants.c"
-#include "draw.c"
+#include "domain.c"
 
 // x position
 int cloud_position_lower(float t) {
@@ -158,5 +157,3 @@ void draw_numeric_debug_info(State* st) {
   DrawText(buf, 5, 5+12*2, 12, WHITE);
 
 }
-
-#endif

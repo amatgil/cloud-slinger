@@ -1,5 +1,4 @@
-#ifndef _DOMAIN_H
-#define _DOMAIN_H
+#pragma once
 
 #include "constants.c"
 #include "definitions.c"
@@ -36,5 +35,3 @@ void check_for_balls_in_clouds(State* st) {
 void clear_errant_balls(State* st) {
   // TODO: iterate over, if the position is -10000 < x < 10000, remove_ball(index)
 }
-
-#endif

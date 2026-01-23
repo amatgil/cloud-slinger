@@ -1,5 +1,4 @@
-#ifndef _CONSTANTS_H
-#define _CONSTANTS_H
+#pragma once
 
 #include <raylib.h>
 
@@ -36,5 +35,3 @@ int INITIAL_SCREEN_HEIGHT = 700;
 #define COLOR_SCORE            (Color){ 230, 255, 230, 255 }
 
 #define BALL_COOLDOWN 1
-
-#endif

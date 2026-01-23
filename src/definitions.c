@@ -1,5 +1,4 @@
-#ifndef _DEFS_H
-#define _DEFS_H
+#pragma once
 
 #include <raylib.h>
 #include <sys/param.h>
@@ -96,5 +95,3 @@ void remove_ball(State* st, int index) {
     index -= 1;
   }
 }
-
-#endif

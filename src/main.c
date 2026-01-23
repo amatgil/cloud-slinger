@@ -38,6 +38,8 @@ void update(State* st) {
 void render(State* st) {
   float h = (float)GetScreenHeight();
 
+  draw_cloud_lower(st);
+  draw_cloud_upper(st);
   draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);
