@@ -1,31 +1,15 @@
 #include <raylib.h>
+#include <raymath.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
+#include <sys/param.h>
 #include "balls.c"
-
-#define CLOUD_WIDTH  120
-#define CLOUD_HEIGHT 25
-// CLOUD_{LOWER, UPPER}_Y are percentages of screenheight
-#define CLOUD_LOWER_Y 0.15
-#define CLOUD_UPPER_Y 0.35
-#define CLOUD_DT 0.1
-#define BALL_RADIUS 8
-
-#define INITIAL_SCREEN_WIDTH  350
-#define INITIAL_SCREEN_HEIGHT INITIAL_SCREEN_WIDTH * 2
-
-#define SLINGSHOT_WIDTH 40
-#define SLINGSHOT_HEIGHT 150
-
+#include "draw.c"
+#include "constants.c"
 
 float DeltaTime;
 
-typedef struct {
-  float cloud_t; // how far along movement, [0..1)
-  struct Ball* balls;
-  Vector2 held_position; // (-1, -1) si no està held
-} State ;
+bool DebugSymbols = false;
 
 State new_state() {
   return (State){0.0, NULL, (Vector2){0.0, 0.0} };
@@ -55,24 +39,6 @@ void add_ball(State* st, int ball_x, int ball_y, int ball_vel_x, int ball_vel_y)
   prev->next = ball;
 }
 
-void draw_ball(struct Ball* ball) {
-  DrawCircle(ball->x, ball->y, BALL_RADIUS, RED);
-}
-
-void draw_slingshot() {
-  int x = (int)((float)GetScreenWidth()/2.0f - (float)SLINGSHOT_WIDTH/2.0);
-  DrawRectangle(x,
-                GetScreenHeight()-SLINGSHOT_HEIGHT,
-                SLINGSHOT_WIDTH,
-                SLINGSHOT_HEIGHT,
-                BLUE);
-}
-
-void draw_mouse_circle() {
-  Vector2 pos = GetMousePosition();   
-  DrawCircle(pos.x, pos.y, BALL_RADIUS, WHITE);
-}
-
 void update(State* st) {
   // t = fract(t+DT*dt)
   st->cloud_t += CLOUD_DT*DeltaTime;
@@ -92,7 +58,9 @@ void render(State* st) {
 
 
   draw_slingshot();
-  draw_mouse_circle();
+  draw_slingshot_strings();
+
+  if (DebugSymbols) draw_mouse_circle();
 
   struct Ball* ball = st->balls;
   while (ball) {
