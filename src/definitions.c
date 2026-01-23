@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <sys/param.h>
 #include <stdlib.h>
+#include "types.c"
 
 #define TAU 6.28318530717958647692
 
@@ -18,7 +19,7 @@ typedef struct {
   struct Ball* balls;
   bool clicking_last_frame; // were we clicking, last frame?
   float cooldown_left; // how long til you can shoot again
-  int score;
+  u32 score;
   Textures textures;
 } State ;
 
@@ -69,8 +70,8 @@ void add_ball(State* st, int ball_x, int ball_y, int ball_vel_x, int ball_vel_y)
   prev->next = ball;
 }
 
-int count_balls(State* st) {
-  int count = 0;
+u32 count_balls(State* st) {
+  u32 count = 0;
   struct Ball* b = st->balls;
   while (b) {
     count += 1;
@@ -80,7 +81,7 @@ int count_balls(State* st) {
   return count;
 }
 
-void remove_ball(State* st, int index) {
+void remove_ball(State* st, u32 index) {
   struct Ball* prev = NULL;
   struct Ball* curr = st->balls;
   while (curr) {

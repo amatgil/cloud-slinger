@@ -38,7 +38,7 @@ bool cloud_basket_collision(struct Ball* ball, float psi, float y) {
 // only handles _one_ ball. if there are more, the first one in the
 // list will get handled
 void handle_ball_cloud_baskets(State* st) {
-  int index = 0;
+  u32 index = 0;
   struct Ball* b = st->balls;
   while (b) {
     if (b->vel_y > 0) {
@@ -64,7 +64,7 @@ void handle_ball_cloud_baskets(State* st) {
 void clear_errant_balls(State* st) {
   assert(st != NULL);
   struct Ball* b = st->balls;
-  int index = 0;
+  u32 index = 0;
   while (b) {
     if (fabs(b->x) > 20*GetScreenWidth() || fabs(b->y) > 20*GetScreenHeight()) {
       remove_ball(st, index);
