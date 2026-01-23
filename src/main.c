@@ -2,6 +2,7 @@
 #include <raymath.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/param.h>
 #include "definitions.c"
@@ -49,11 +50,24 @@ void render(State* st) {
   }
 }
 
+void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* where) {
+  if (strcmp(TextToLower(argv[i]), flag) == 0) {
+    if (i+1 >= argc) {
+      printf("'%s' given without actual value\n", flag);
+      exit(1);
+    }
+    long x = strtol(argv[i+1], NULL, 10); // Assumeixo que és correcte perquè C va com vol
+    *where = x;
+    i += 1;
+  }
 
+}
 
 int main(int argc, char** argv) {
-  if (argc > 1) {
-    if (strcmp(argv[1], "DEBUG") == 0) DebugSymbols = true;
+  for (int i = 1; i < argc; ++i) {
+    if (strcmp(TextToLower(argv[i]), "-d") == 0) DebugSymbols = true;
+    check_and_set_dim_from_args(i, argc, argv, "-w", &INITIAL_SCREEN_WIDTH);
+    check_and_set_dim_from_args(i, argc, argv, "-h", &INITIAL_SCREEN_HEIGHT);
   }
 
   State st = new_state();
