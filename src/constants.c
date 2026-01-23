@@ -5,7 +5,6 @@
 
 #define CLOUD_WIDTH  60
 #define CLOUD_HEIGHT 25
-// CLOUD_{LOWER, UPPER}_Y are percentages of screenheight
 #define CLOUD_LOWER_Y_PERCENTAGE 0.35
 #define CLOUD_UPPER_Y_PERCENTAGE 0.15
 #define CLOUD_DT 0.1
