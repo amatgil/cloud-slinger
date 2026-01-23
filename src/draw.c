@@ -62,7 +62,7 @@ void draw_slingshot_strings() {
 
 }
 
-// Draws ball in slingshot focus when the mouse is clicked, does nothingo otherwise
+// Draws ball in slingshot focus when cooldown permits, does nothingo otherwise
 // Balls don't actually exist until they're thrown!
 void draw_ready_ball(State* st) {
   if (st->cooldown_left > 0) return;
