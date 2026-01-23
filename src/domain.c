@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include <math.h>
+#include <assert.h>
 
 Vector2 get_slingshot_focus() {
   Vector2 anchor_base = SLINGSHOT_CENTER;
@@ -16,6 +17,8 @@ Vector2 get_slingshot_focus() {
 
 
 void summon_ball(State* st) {
+  assert(st != NULL);
+
   Vector2 focus = get_slingshot_focus();
   float power_factor = (float)Vector2Distance(focus, SLINGSHOT_CENTER) / SLINGSHOT_MAX_RADIUS;
   float theta = Vector2LineAngle(focus, SLINGSHOT_CENTER) + TAU/2.0;

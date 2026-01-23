@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
@@ -35,14 +36,18 @@ Rectangle cloud_rectangle_upper(float t) {
 }
 
 void draw_cloud_lower(State* st) {
+  assert(st != NULL);
   DrawRectangleRec(cloud_rectangle_lower(st->cloud_t), COLOR_CLOUD);
 }
 void draw_cloud_upper(State* st) {
+  assert(st != NULL);
   DrawRectangleRec(cloud_rectangle_upper(st->cloud_t), COLOR_CLOUD);
 }
 
 
 void draw_ball(State* st, struct Ball* ball) {
+  assert(st != NULL);
+  assert(ball != NULL);
   Rectangle underlying = (Rectangle){
       .x = ball->x - BALL_RADIUS,
       .y = ball->y - BALL_RADIUS,
@@ -58,6 +63,7 @@ void draw_ball(State* st, struct Ball* ball) {
 }
 
 void draw_slingshot(State* st) {
+  assert(st != NULL);
   int x = (int)((float)GetScreenWidth()/2.0f - (float)SLINGSHOT_WIDTH/2.0);
   Rectangle underlying = (Rectangle){
     .x      = x,
@@ -103,6 +109,7 @@ void draw_slingshot_strings() {
 // Draws ball in slingshot focus when cooldown permits, does nothing otherwise
 // Balls don't actually exist until they're thrown!
 void draw_ready_ball(State* st) {
+  assert(st != NULL);
   if (st->cooldown_left > 0) return;
 
 
@@ -116,7 +123,6 @@ void draw_ready_ball(State* st) {
     .vel_y = 0,
     .next  = NULL
   };
-
   if (!IsMouseButtonDown(0)) {
     b.x = SLINGSHOT_CENTER.x;
     b.y = SLINGSHOT_CENTER.y + SLINGSHOT_MAX_RADIUS/2.0;
