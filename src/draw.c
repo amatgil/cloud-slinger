@@ -14,47 +14,47 @@ void draw_ball(struct Ball* ball) {
 void draw_slingshot() {
   int x = (int)((float)GetScreenWidth()/2.0f - (float)SLINGSHOT_WIDTH/2.0);
   DrawRectangle(x,
-                GetScreenHeight()-SLINGSHOT_HEIGHT,
-                SLINGSHOT_WIDTH,
-                SLINGSHOT_HEIGHT,
-                BLUE);
+    GetScreenHeight()-SLINGSHOT_HEIGHT,
+    SLINGSHOT_WIDTH,
+    SLINGSHOT_HEIGHT,
+    BLUE);
 }
 
 // Inputs are at the center of the ends
 void draw_slingshot_string(Vector2 a, Vector2 b) {
-    DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, SLINGSHOT_STRING_COLOR);
+  DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, SLINGSHOT_STRING_COLOR);
 }
 
 Vector2 get_slingshot_focus() {
-    float x = GetScreenWidth()/2.0;
-    float dx = SLINGSHOT_WIDTH/2.0;
-    float y = GetScreenHeight()-SLINGSHOT_HEIGHT;
+  float x = GetScreenWidth()/2.0;
+  float dx = SLINGSHOT_WIDTH/2.0;
+  float y = GetScreenHeight()-SLINGSHOT_HEIGHT;
 
-    Vector2 anchor_base = (Vector2){ .x = x, .y = y };
+  Vector2 anchor_base = (Vector2){ .x = x, .y = y };
 
-    float length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
-    Vector2 dir =  Vector2Normalize(Vector2Subtract(GetMousePosition(), anchor_base));
-    return Vector2Add(anchor_base, Vector2Scale(dir, length));
+  float length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
+  Vector2 dir =  Vector2Normalize(Vector2Subtract(GetMousePosition(), anchor_base));
+  return Vector2Add(anchor_base, Vector2Scale(dir, length));
 }
 
 void draw_slingshot_strings() {
-    float x = GetScreenWidth()/2.0;
-    float dx = SLINGSHOT_WIDTH/2.0;
-    float y = GetScreenHeight()-SLINGSHOT_HEIGHT;
+  float x = GetScreenWidth()/2.0;
+  float dx = SLINGSHOT_WIDTH/2.0;
+  float y = GetScreenHeight()-SLINGSHOT_HEIGHT;
 
-    Vector2 anchor_left  = (Vector2){ .x = x - dx, .y = y };
-    Vector2 anchor_right = (Vector2){ .x = x + dx, .y = y };
-    Vector2 anchor_unheld = (Vector2){ .x = x, .y = y+SLINGSHOT_MAX_RADIUS };
+  Vector2 anchor_left  = (Vector2){ .x = x - dx, .y = y };
+  Vector2 anchor_right = (Vector2){ .x = x + dx, .y = y };
+  Vector2 anchor_unheld = (Vector2){ .x = x, .y = y+SLINGSHOT_MAX_RADIUS };
 
-    if (!IsMouseButtonDown(0)) {
-        draw_slingshot_string(anchor_left, anchor_unheld);
-        draw_slingshot_string(anchor_right, anchor_unheld);
-        return;
-    }
+  if (!IsMouseButtonDown(0)) {
+    draw_slingshot_string(anchor_left, anchor_unheld);
+    draw_slingshot_string(anchor_right, anchor_unheld);
+    return;
+  }
 
-    Vector2 target = get_slingshot_focus();
-    draw_slingshot_string(anchor_left, target);
-    draw_slingshot_string(anchor_right, target);
+  Vector2 target = get_slingshot_focus();
+  draw_slingshot_string(anchor_left, target);
+  draw_slingshot_string(anchor_right, target);
 
 }
 

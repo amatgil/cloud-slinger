@@ -19,10 +19,10 @@ void update(State* st) {
 
   struct Ball* ball = st->balls;
   while (ball) {
-      ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
-      ball->y     += ball->vel_y*DeltaTime;
-      ball->x     += ball->vel_x*DeltaTime;
-      ball = ball->next;
+    ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
+    ball->y     += ball->vel_y*DeltaTime;
+    ball->x     += ball->vel_x*DeltaTime;
+    ball = ball->next;
   }
 }
 
@@ -53,7 +53,7 @@ void render(State* st) {
 
 int main(int argc, char** argv) {
   if (argc > 1) {
-      if (strcmp(argv[1], "DEBUG") == 0) DebugSymbols = true;
+    if (strcmp(argv[1], "DEBUG") == 0) DebugSymbols = true;
   }
 
   State st = new_state();
