@@ -36,13 +36,10 @@ void update(State* st) {
 }
 
 void render(State* st) {
-  float lower_x = cloud_position_lower(st->cloud_t);
-  float upper_x = cloud_position_upper(st->cloud_t);
-  float screen_h = (float)GetScreenHeight();
+  float h = (float)GetScreenHeight();
 
-  DrawRectangle(lower_x, (int)(screen_h*CLOUD_LOWER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, WHITE);
-  DrawRectangle(upper_x, (int)(screen_h*CLOUD_UPPER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, WHITE);
-
+  DrawRectangle(cloud_position_lower(st->cloud_t), (int)(h*CLOUD_LOWER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, COLOR_CLOUD);
+  DrawRectangle(cloud_position_upper(st->cloud_t), (int)(h*CLOUD_UPPER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, COLOR_CLOUD);
 
   draw_slingshot();
   draw_slingshot_strings();
