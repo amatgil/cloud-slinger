@@ -35,6 +35,16 @@ void check_for_balls_in_clouds(State* st) {
 }
 
 // delete balls whose position is absurd
+// deletes a maximum of ONE ball
 void clear_errant_balls(State* st) {
-  // TODO: iterate over, if the position is -10000 < x < 10000, remove_ball(index)
+  struct Ball* b = st->balls;
+  int index = 0;
+  while (b) {
+    if (b->x < -10000 || b->x > 10000 || b->y < -10000 || b->y > 10000 ) {
+      remove_ball(st, index);
+      return; // otherwise the index will be out of sync wrt the list (it's not DoubleEnded)
+    }
+    b = b->next;
+    index += 1;
+  }
 }
