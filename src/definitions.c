@@ -12,11 +12,12 @@ typedef struct {
   float cloud_t; // how far along movement, [0..1)
   struct Ball* balls;
   bool clicking_last_frame; // were we clicking, last frame?
+  float cooldown_left; // how long til you can shoot again
 } State ;
 
 
 State new_state() {
-  return (State){0.0, NULL, false };
+  return (State){0.0, NULL, false, 0.0 };
 }
 
 struct Ball {

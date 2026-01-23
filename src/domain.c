@@ -28,6 +28,7 @@ void summon_ball(State* st) {
   int vel_y = sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
 
   add_ball(st, target.x, target.y, vel_x, vel_y);
+  st->cooldown_left = BALL_COOLDOWN;
 
 }
 

@@ -3,6 +3,7 @@
 
 #include <raylib.h>
 #include <raymath.h>
+#include <stdio.h>
 #include <sys/param.h>
 #include "definitions.c"
 #include "constants.c"
@@ -63,8 +64,9 @@ void draw_slingshot_strings() {
 
 // Draws ball in slingshot focus when the mouse is clicked, does nothingo otherwise
 // Balls don't actually exist until they're thrown!
-void draw_ready_ball() {
+void draw_ready_ball(State* st) {
   if (!IsMouseButtonDown(0)) return;
+  if (st->cooldown_left > 0) return;
 
   Vector2 t = get_slingshot_focus();
 
@@ -88,6 +90,12 @@ void draw_mouse_circle() {
 void draw_slingshot_radius() {
   Vector2 p = get_slingshot_center();
   DrawCircleLines(p.x, p.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
+}
+
+void draw_numeric_debug_info(State* st) {
+  char buf[256];
+  sprintf(buf, "Cooldown: %.3f", st->cooldown_left);
+  DrawText(buf, 5, 5, 12, WHITE);
 }
 
 #endif

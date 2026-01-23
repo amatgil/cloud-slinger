@@ -18,7 +18,6 @@ void update(State* st) {
   // t = fract(t+DT*dt)
   st->cloud_t += CLOUD_DT*DeltaTime;
   st->cloud_t = st->cloud_t - (float)(int)st->cloud_t;
-  printf("t = %f\n", st->cloud_t);
   struct Ball* ball = st->balls;
   while (ball) {
     ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
@@ -28,7 +27,9 @@ void update(State* st) {
   }
   clear_errant_balls(st);
 
-  if (!IsMouseButtonDown(0) && st->clicking_last_frame) summon_ball(st);
+  if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->cooldown_left == 0) summon_ball(st);
+  st->cooldown_left -= DeltaTime;
+  st->cooldown_left = MAX(st->cooldown_left, 0);
 
 
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
@@ -45,7 +46,7 @@ void render(State* st) {
 
   draw_slingshot();
   draw_slingshot_strings();
-  draw_ready_ball();
+  draw_ready_ball(st);
 
   struct Ball* ball = st->balls;
   while (ball) {
@@ -56,6 +57,7 @@ void render(State* st) {
   if (DebugSymbols) {
      draw_mouse_circle();
      draw_slingshot_radius();
+     draw_numeric_debug_info(st);
   }
 }
 
@@ -86,9 +88,6 @@ int main(int argc, char** argv) {
 
   SetTargetFPS(60.0);
 
-  add_ball(&st, 100, 100, 0, -100);
-  add_ball(&st, 100, 200, 0, 0);
-  add_ball(&st, 100, 300, 0, 0);
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();
     BeginDrawing();
