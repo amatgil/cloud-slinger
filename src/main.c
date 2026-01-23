@@ -38,9 +38,6 @@ void update(State* st) {
 void render(State* st) {
   float h = (float)GetScreenHeight();
 
-  DrawRectangleRec(cloud_rectangle_lower(st->cloud_t), COLOR_CLOUD);
-  DrawRectangleRec(cloud_rectangle_upper(st->cloud_t), COLOR_CLOUD);
-
   draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);

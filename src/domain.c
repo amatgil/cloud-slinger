@@ -1,38 +1,20 @@
-#ifndef  _DOMAIN_H
+#ifndef _DOMAIN_H
 #define _DOMAIN_H
 
 #include "constants.c"
 #include "definitions.c"
-#include "draw.c"
 #include "raylib.h"
 #include "raymath.h"
 #include <math.h>
 
-// x position
-int cloud_position_lower(float t) {
-  return (sin(    t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
-}
-int cloud_position_upper(float t) {
-  return (sin(1.6+t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+Vector2 get_slingshot_focus() {
+  Vector2 anchor_base = SLINGSHOT_CENTER;
+
+  float length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
+  Vector2 dir =  Vector2Normalize(Vector2Subtract(GetMousePosition(), anchor_base));
+  return Vector2Add(anchor_base, Vector2Scale(dir, length));
 }
 
-Rectangle cloud_rectangle_lower(float t) {
-  float h = (float)GetScreenHeight();
-  return (Rectangle) {
-    .x      = cloud_position_lower(t),
-    .y      = (int)(h*CLOUD_LOWER_Y),
-    .width  =  CLOUD_WIDTH,
-    .height =  CLOUD_HEIGHT };
-}
-
-Rectangle cloud_rectangle_upper(float t) {
-  float h = (float)GetScreenHeight();
-  return (Rectangle) {
-    .x      = cloud_position_upper(t),
-    .y      = (int)(h*CLOUD_UPPER_Y),
-    .width  =  CLOUD_WIDTH,
-    .height =  CLOUD_HEIGHT };
-}
 
 void summon_ball(State* st) {
   Vector2 focus = get_slingshot_focus();

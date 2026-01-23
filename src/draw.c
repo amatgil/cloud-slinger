@@ -7,6 +7,41 @@
 #include <sys/param.h>
 #include "definitions.c"
 #include "constants.c"
+#include "draw.c"
+
+// x position
+int cloud_position_lower(float t) {
+  return (sin(    t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+}
+int cloud_position_upper(float t) {
+  return (sin(1.6+t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+}
+
+Rectangle cloud_rectangle_lower(float t) {
+  float h = (float)GetScreenHeight();
+  return (Rectangle) {
+    .x      = cloud_position_lower(t),
+    .y      = (int)(h*CLOUD_LOWER_Y),
+    .width  =  CLOUD_WIDTH,
+    .height =  CLOUD_HEIGHT };
+}
+
+Rectangle cloud_rectangle_upper(float t) {
+  float h = (float)GetScreenHeight();
+  return (Rectangle) {
+    .x      = cloud_position_upper(t),
+    .y      = (int)(h*CLOUD_UPPER_Y),
+    .width  =  CLOUD_WIDTH,
+    .height =  CLOUD_HEIGHT };
+}
+
+void draw_cloud_lower(State* st) {
+  DrawRectangleRec(cloud_rectangle_lower(st->cloud_t), COLOR_CLOUD);
+}
+void draw_cloud_upper(State* st) {
+  DrawRectangleRec(cloud_rectangle_upper(st->cloud_t), COLOR_CLOUD);
+}
+
 
 void draw_ball(State* st, struct Ball* ball) {
   Rectangle underlying = (Rectangle){
@@ -42,14 +77,6 @@ void draw_slingshot(State* st) {
 // Inputs are at the center of the ends
 void draw_slingshot_string(Vector2 a, Vector2 b) {
   DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, COLOR_SLINGSHOT_STRING);
-}
-
-Vector2 get_slingshot_focus() {
-  Vector2 anchor_base = SLINGSHOT_CENTER;
-
-  float length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
-  Vector2 dir =  Vector2Normalize(Vector2Subtract(GetMousePosition(), anchor_base));
-  return Vector2Add(anchor_base, Vector2Scale(dir, length));
 }
 
 void draw_slingshot_strings() {
