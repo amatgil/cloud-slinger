@@ -34,4 +34,7 @@ int INITIAL_SCREEN_HEIGHT = 700;
 #define COLOR_CLOUD            (Color){ 230, 255, 230, 255 }
 #define COLOR_SCORE            (Color){ 230, 255, 230, 255 }
 
+#define POINTS_FOR_LOWER 1
+#define POINTS_FOR_UPPER 2
+
 #define BALL_COOLDOWN 1

@@ -30,7 +30,7 @@ void update(State* st) {
   st->cooldown_left -= DeltaTime;
   st->cooldown_left = MAX(st->cooldown_left, 0);
 
-  check_for_balls_in_clouds(st);
+  handle_ball_cloud_baskets(st);
 
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }
@@ -38,8 +38,8 @@ void update(State* st) {
 void render(State* st) {
   float h = (float)GetScreenHeight();
 
-  draw_cloud_lower(st);
-  draw_cloud_upper(st);
+  draw_cloud(st, st->cloud_psi_lower, CLOUD_LOWER_Y);
+  draw_cloud(st, st->cloud_psi_upper, CLOUD_UPPER_Y);
   draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);

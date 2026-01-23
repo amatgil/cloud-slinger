@@ -10,38 +10,22 @@
 #include "domain.c"
 
 // x position
-int cloud_position_lower(float t) {
-  return (sin(    t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
-}
-int cloud_position_upper(float t) {
-  return (sin(1.6+t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+int cloud_position(float t, float psi) {
+  return (sin(t*TAU + psi) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
 }
 
-Rectangle cloud_rectangle_lower(float t) {
+Rectangle cloud_rectangle(float t, float psi, float height_percent) {
   float h = (float)GetScreenHeight();
   return (Rectangle) {
-    .x      = cloud_position_lower(t),
-    .y      = (int)(h*CLOUD_LOWER_Y),
+    .x      = cloud_position(t, psi),
+    .y      = (int)(h*height_percent),
     .width  =  CLOUD_WIDTH,
     .height =  CLOUD_HEIGHT };
 }
 
-Rectangle cloud_rectangle_upper(float t) {
-  float h = (float)GetScreenHeight();
-  return (Rectangle) {
-    .x      = cloud_position_upper(t),
-    .y      = (int)(h*CLOUD_UPPER_Y),
-    .width  =  CLOUD_WIDTH,
-    .height =  CLOUD_HEIGHT };
-}
-
-void draw_cloud_lower(State* st) {
+void draw_cloud(State* st, float psi, float height_percent) {
   assert(st != NULL);
-  DrawRectangleRec(cloud_rectangle_lower(st->cloud_t), COLOR_CLOUD);
-}
-void draw_cloud_upper(State* st) {
-  assert(st != NULL);
-  DrawRectangleRec(cloud_rectangle_upper(st->cloud_t), COLOR_CLOUD);
+  DrawRectangleRec(cloud_rectangle(st->cloud_t, psi, height_percent), COLOR_CLOUD);
 }
 
 

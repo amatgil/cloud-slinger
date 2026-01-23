@@ -13,6 +13,8 @@ typedef struct {
 
 typedef struct {
   float cloud_t; // how far along movement, [0..1)
+  float cloud_psi_lower;
+  float cloud_psi_upper;
   struct Ball* balls;
   bool clicking_last_frame; // were we clicking, last frame?
   float cooldown_left; // how long til you can shoot again
@@ -25,6 +27,8 @@ State new_state() {
   Textures textures = (Textures){};
   return (State){
     .cloud_t = 0.0,
+    .cloud_psi_lower = 0.0,
+    .cloud_psi_upper = TAU/4 + 0.1,
     .balls = NULL,
     .clicking_last_frame = false,
     .cooldown_left = 0.0,
