@@ -59,6 +59,17 @@ void add_ball(State* st, int ball_x, int ball_y, int ball_vel_x, int ball_vel_y)
   prev->next = ball;
 }
 
+int count_balls(State* st) {
+  int count = 0;
+  struct Ball* b = st->balls;
+  while (b) {
+    count += 1;
+    b = b->next;
+  }
+
+  return count;
+}
+
 void remove_ball(State* st, int index) {
   struct Ball* prev = NULL;
   struct Ball* curr = st->balls;

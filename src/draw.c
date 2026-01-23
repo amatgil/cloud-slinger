@@ -100,11 +100,17 @@ void draw_slingshot_radius() {
 }
 
 void draw_numeric_debug_info(State* st) {
+
   char buf[256];
   sprintf(buf, "Cooldown: %.3f", st->cooldown_left);
   DrawText(buf, 5, 5+12*0, 12, WHITE);
+
   sprintf(buf, "Cloud t: %.3f", st->cloud_t);
   DrawText(buf, 5, 5+12*1, 12, WHITE);
+
+  sprintf(buf, "Num balls: %d", count_balls(st));
+  DrawText(buf, 5, 5+12*2, 12, WHITE);
+
 }
 
 #endif
