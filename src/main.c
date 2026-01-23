@@ -11,8 +11,6 @@
 
 f32 DeltaTime;
 
-bool DebugSymbols = false;
-
 void update(State* st) {
   // t = fract(t+DT*dt)
   st->cloud_t += CLOUD_DT*DeltaTime;
@@ -51,7 +49,7 @@ void render(State* st) {
     ball = ball->next;
   }
 
-  if (DebugSymbols) {
+  if (st->debug_mode) {
      draw_mouse_circle();
      draw_slingshot_radius();
      draw_numeric_debug_info(st);
@@ -59,11 +57,12 @@ void render(State* st) {
   }
 }
 
-State init() {
+State init(bool debug_mode) {
   InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
   SetTargetFPS(60.0);
 
   State st = new_state();
+  st.debug_mode = debug_mode;
 
   Texture2D slingshot = LoadTexture("../assets/slingshot.png");
   Texture2D ball      = LoadTexture("../assets/ball.png");
@@ -89,13 +88,14 @@ void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, char* flag, i32* 
 }
 
 int main(i32 argc, char** argv) {
+  bool debug_mode = false;
   for (i32 i = 1; i < argc; ++i) {
-    if (strcmp(TextToLower(argv[i]), "-d") == 0) DebugSymbols = true;
+    if (strcmp(TextToLower(argv[i]), "-d") == 0) debug_mode = true;
     check_and_set_dim_from_args(i, argc, argv, "-w", &INITIAL_SCREEN_WIDTH);
     check_and_set_dim_from_args(i, argc, argv, "-h", &INITIAL_SCREEN_HEIGHT);
   }
 
-  State st = init();
+  State st = init(debug_mode);
 
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();

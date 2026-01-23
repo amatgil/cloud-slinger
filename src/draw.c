@@ -29,7 +29,7 @@ void draw_ball(State* st, struct Ball* ball) {
     (Rectangle){ .x = 0.0, .y = 0.0, .width = st->textures.ball.width, .height = st->textures.ball.height},
     underlying,
     Vector2Zero(), 0.0, WHITE);
-  //DrawCircle(ball->x, ball->y, BALL_RADIUS, RED);
+  if(st->debug_mode) DrawCircle(ball->x, ball->y, BALL_RADIUS, (Color){255, 0, 0, 100});
 }
 
 void draw_slingshot(State* st) {

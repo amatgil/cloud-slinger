@@ -6,6 +6,7 @@
 #include "raymath.h"
 #include <math.h>
 #include <assert.h>
+#include <stdio.h>
 
 // x position
 i32 cloud_position_x(f32 t, f32 psi) {
@@ -58,23 +59,32 @@ Rectangle cloud_basket_hitbox(f32 t, f32 psi, f32 y) {
 
 }
 
+// Is there a collision between the cloud defined by (t, psi, y) and ball?
 bool cloud_basket_collision(struct Ball* ball, f32 t, f32 psi, f32 y) {
-  return false; // TODO
+  assert(ball != NULL);
+  Rectangle hitbox = cloud_basket_hitbox(t, psi, y);
+  Vector2 pos = (Vector2){.x = ball->x, .y = ball->y};
+
+  return CheckCollisionCircleRec(pos, BALL_RADIUS, hitbox);
 }
 
 // only handles _one_ ball. if there are more, the first one in the
 // list will get handled
 void handle_ball_cloud_baskets(State* st) {
+  assert(st != NULL);
+
   u32 index = 0;
   struct Ball* b = st->balls;
   while (b) {
     if (b->vel_y > 0) {
-      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_lower, CLOUD_LOWER_Y)) {
+      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_lower, GetScreenHeight()*CLOUD_LOWER_Y)) {
+        if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with lower cloud\n", b->x, b->y, index);
         st->score += POINTS_FOR_LOWER;
         remove_ball(st, index);
         return;
       }
-      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_upper, CLOUD_UPPER_Y)) {
+      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_upper, GetScreenHeight()*CLOUD_UPPER_Y)) {
+        if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with upper cloud\n", b->x, b->y, index);
         st->score += POINTS_FOR_UPPER;
         remove_ball(st, index);
         return;
