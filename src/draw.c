@@ -42,9 +42,9 @@ Vector2 get_slingshot_focus() {
 }
 
 void draw_slingshot_strings() {
-  float x = GetScreenWidth()/2.0;
+  float x = get_slingshot_center().x;
+  float y = get_slingshot_center().y;
   float dx = SLINGSHOT_WIDTH/2.0;
-  float y = GetScreenHeight()-SLINGSHOT_HEIGHT;
 
   Vector2 anchor_left  = (Vector2){ .x = x - dx, .y = y };
   Vector2 anchor_right = (Vector2){ .x = x + dx, .y = y };
@@ -65,7 +65,6 @@ void draw_slingshot_strings() {
 // Draws ball in slingshot focus when the mouse is clicked, does nothingo otherwise
 // Balls don't actually exist until they're thrown!
 void draw_ready_ball(State* st) {
-  if (!IsMouseButtonDown(0)) return;
   if (st->cooldown_left > 0) return;
 
   Vector2 t = get_slingshot_focus();
@@ -78,6 +77,10 @@ void draw_ready_ball(State* st) {
     .vel_x = 0,
     .vel_y = 0,
     .next  = NULL
+  };
+  if (!IsMouseButtonDown(0)) {
+    b.x = get_slingshot_center().x;
+    b.y = get_slingshot_center().y + SLINGSHOT_MAX_RADIUS;
   };
   draw_ball(&b);
 }
