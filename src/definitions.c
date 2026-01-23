@@ -7,23 +7,29 @@
 
 #define TAU 6.28318530717958647692
 
-#define NOTHING_HELD (Vector2){-1, -1}
+typedef struct {
+  Texture2D slingshot;
+} Textures;
+
 typedef struct {
   float cloud_t; // how far along movement, [0..1)
   struct Ball* balls;
   bool clicking_last_frame; // were we clicking, last frame?
   float cooldown_left; // how long til you can shoot again
   int score;
+  Textures textures;
 } State ;
 
 
 State new_state() {
+  Textures textures = (Textures){};
   return (State){
     .cloud_t = 0.0,
     .balls = NULL,
     .clicking_last_frame = false,
     .cooldown_left = 0.0,
-    .score = 0
+    .score = 0,
+    .textures = textures
   };
 }
 

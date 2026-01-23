@@ -41,7 +41,7 @@ void render(State* st) {
   DrawRectangleRec(cloud_rectangle_lower(st->cloud_t), COLOR_CLOUD);
   DrawRectangleRec(cloud_rectangle_upper(st->cloud_t), COLOR_CLOUD);
 
-  draw_slingshot();
+  draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);
   draw_score(st);
@@ -57,6 +57,17 @@ void render(State* st) {
      draw_slingshot_radius();
      draw_numeric_debug_info(st);
   }
+}
+
+State init() {
+  InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
+  SetTargetFPS(60.0);
+
+  State st = new_state();
+  Texture2D slingshot = LoadTexture("../assets/slingshot.png");
+  st.textures.slingshot = slingshot;
+
+  return st;
 }
 
 
@@ -80,11 +91,7 @@ int main(int argc, char** argv) {
     check_and_set_dim_from_args(i, argc, argv, "-h", &INITIAL_SCREEN_HEIGHT);
   }
 
-  State st = new_state();
-
-  InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
-
-  SetTargetFPS(60.0);
+  State st = init();
 
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();
