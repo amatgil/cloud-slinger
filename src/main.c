@@ -40,6 +40,7 @@ void render(State* st) {
 
   draw_slingshot();
   draw_slingshot_strings();
+  draw_ready_ball();
 
   struct Ball* ball = st->balls;
   while (ball) {

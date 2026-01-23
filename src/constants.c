@@ -24,6 +24,6 @@ int INITIAL_SCREEN_HEIGHT = 700;
 #define COLOR_BACKGROUND       (Color){ 24,   24,  37, 255 }
 #define COLOR_SLINGSHOT        (Color){ 137, 180, 250, 255 }
 #define COLOR_BALL             (Color){ 243, 139, 168, 255 }
-#define COLOR_SLINGSHOT_STRING (Color){ 148, 226, 213, 255 }
+#define COLOR_SLINGSHOT_STRING (Color){ 205, 214, 244, 255 }
 
 #endif

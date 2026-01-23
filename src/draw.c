@@ -58,6 +58,25 @@ void draw_slingshot_strings() {
 
 }
 
+// Draws ball in slingshot focus when the mouse is clicked, does nothingo otherwise
+// Balls don't actually exist until they're thrown!
+void draw_ready_ball() {
+  if (!IsMouseButtonDown(0)) return;
+
+  Vector2 t = get_slingshot_focus();
+
+  // Passing a pointer to the stack, but the function doesn't keep it around, so it's fine
+  // I miss the borrow checker
+  struct Ball b = (struct Ball){
+    .x     = t.x,
+    .y     = t.y,
+    .vel_x = 0,
+    .vel_y = 0,
+    .next  = NULL
+  };
+  draw_ball(&b);
+}
+
 void draw_mouse_circle() {
   Vector2 pos = GetMousePosition();
   DrawCircle(pos.x, pos.y, 5, (Color){255, 255, 255, 80});
