@@ -17,12 +17,12 @@ void draw_slingshot() {
     GetScreenHeight()-SLINGSHOT_HEIGHT,
     SLINGSHOT_WIDTH,
     SLINGSHOT_HEIGHT,
-    BLUE);
+    COLOR_SLINGSHOT);
 }
 
 // Inputs are at the center of the ends
 void draw_slingshot_string(Vector2 a, Vector2 b) {
-  DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, SLINGSHOT_STRING_COLOR);
+  DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, COLOR_SLINGSHOT_STRING);
 }
 
 Vector2 get_slingshot_focus() {
@@ -60,7 +60,7 @@ void draw_slingshot_strings() {
 
 void draw_mouse_circle() {
   Vector2 pos = GetMousePosition();
-  DrawCircle(pos.x, pos.y, BALL_RADIUS, WHITE);
+  DrawCircle(pos.x, pos.y, 5, (Color){255, 255, 255, 80});
 }
 
 #endif

@@ -41,13 +41,13 @@ void render(State* st) {
   draw_slingshot();
   draw_slingshot_strings();
 
-  if (DebugSymbols) draw_mouse_circle();
-
   struct Ball* ball = st->balls;
   while (ball) {
     draw_ball(ball);
     ball = ball->next;
   }
+
+  if (DebugSymbols) draw_mouse_circle();
 }
 
 void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* where) {
@@ -79,13 +79,10 @@ int main(int argc, char** argv) {
   add_ball(&st, 100, 100, 0, -100);
   add_ball(&st, 100, 200, 0, 0);
   add_ball(&st, 100, 300, 0, 0);
-  remove_ball(&st, 0);
-  remove_ball(&st, 0);
-  remove_ball(&st, 0);
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();
     BeginDrawing();
-    ClearBackground(BLACK);
+    ClearBackground(COLOR_BACKGROUND);
     update(&st);
     render(&st);
     EndDrawing();
