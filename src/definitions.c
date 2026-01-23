@@ -54,18 +54,18 @@ void remove_ball(State* st, int index) {
   while (curr) {
     if (index == 0) {
       struct Ball* next = curr->next;
-      if (next == NULL && prev == NULL) {};
+      if (next == NULL && prev == NULL) st->balls = NULL;
       if (next != NULL && prev == NULL) st->balls = next;
       if (next == NULL && prev != NULL) prev->next = NULL;
       if (next != NULL && prev != NULL) prev->next = next;
 
       free(curr);   // i miss Drop :(
+      return;
     }
-    return;
+    prev = curr;
+    curr = curr->next;
+    index -= 1;
   }
-  prev = curr;
-  curr = curr->next;
-  index -= 1;
 }
 
 #endif
