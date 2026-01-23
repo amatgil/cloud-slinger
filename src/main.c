@@ -48,7 +48,7 @@ void render(State* st) {
 
   struct Ball* ball = st->balls;
   while (ball) {
-    draw_ball(ball);
+    draw_ball(st, ball);
     ball = ball->next;
   }
 
@@ -64,8 +64,12 @@ State init() {
   SetTargetFPS(60.0);
 
   State st = new_state();
+
   Texture2D slingshot = LoadTexture("../assets/slingshot.png");
+  Texture2D ball      = LoadTexture("../assets/ball.png");
+
   st.textures.slingshot = slingshot;
+  st.textures.ball      = ball;
 
   return st;
 }

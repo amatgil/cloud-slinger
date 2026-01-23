@@ -8,8 +8,19 @@
 #include "definitions.c"
 #include "constants.c"
 
-void draw_ball(struct Ball* ball) {
-  DrawCircle(ball->x, ball->y, BALL_RADIUS, RED);
+void draw_ball(State* st, struct Ball* ball) {
+  Rectangle underlying = (Rectangle){
+      .x = ball->x - BALL_RADIUS,
+      .y = ball->y - BALL_RADIUS,
+      .width  = BALL_RADIUS*2.0,
+      .height = BALL_RADIUS*2.0,
+  };
+  DrawTexturePro(
+    st->textures.ball,
+    (Rectangle){ .x = 0.0, .y = 0.0, .width = st->textures.ball.width, .height = st->textures.ball.height},
+    underlying,
+    Vector2Zero(), 0.0, WHITE);
+  //DrawCircle(ball->x, ball->y, BALL_RADIUS, RED);
 }
 
 void draw_slingshot(State* st) {
@@ -25,9 +36,7 @@ void draw_slingshot(State* st) {
     st->textures.slingshot,
     (Rectangle){.x = 0.0, .y = 0.0, .width = st->textures.slingshot.width, .height = st->textures.slingshot.height},
     underlying,
-    (Vector2){ .x = 0.0, .y = 0.0 },
-    0.0,
-    WHITE);
+    Vector2Zero(), 0.0, WHITE);
 }
 
 // Inputs are at the center of the ends
@@ -89,7 +98,7 @@ void draw_ready_ball(State* st) {
 
   // Passing a pointer to the stack, but the function doesn't keep it around, so it's fine
   // I miss the borrow checker
-  draw_ball(&b);
+  draw_ball(st, &b);
 }
 
 void draw_score(State* st) {

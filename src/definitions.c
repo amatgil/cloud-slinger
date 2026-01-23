@@ -9,6 +9,7 @@
 
 typedef struct {
   Texture2D slingshot;
+  Texture2D ball;
 } Textures;
 
 typedef struct {
