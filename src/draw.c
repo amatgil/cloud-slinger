@@ -82,6 +82,14 @@ void draw_ready_ball(State* st) {
   draw_ball(&b);
 }
 
+void draw_score(State* st) {
+  char buf[256];
+  sprintf(buf, "%d", st->score);
+  int width = MeasureText(buf, SCORE_FONTSIZE);
+  DrawText(buf, GetScreenWidth()/2.0 - width/2.0, SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
+
+}
+
 void draw_mouse_circle() {
   Vector2 pos = GetMousePosition();
   DrawCircle(pos.x, pos.y, 5, (Color){255, 255, 255, 80});

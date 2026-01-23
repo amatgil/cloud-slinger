@@ -10,12 +10,10 @@
 
 // x position
 int cloud_position_lower(float t) {
-  float theta = t*TAU;
-  return (sin(theta) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+  return (sin(    t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
 }
 int cloud_position_upper(float t) {
-  float theta = t*TAU;
-  return (sin(1.6+theta) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+  return (sin(1.6+t*TAU) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
 }
 
 void summon_ball(State* st) {

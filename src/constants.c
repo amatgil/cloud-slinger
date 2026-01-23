@@ -20,6 +20,9 @@ int INITIAL_SCREEN_HEIGHT = 700;
 #define SLINGSHOT_MAX_RADIUS 100
 #define SLINGSHOT_CENTER (Vector2){.x = GetScreenWidth()/2.0, .y = GetScreenHeight()-SLINGSHOT_HEIGHT}
 
+#define SCORE_FONTSIZE  20
+#define SCORE_PADDING_Y 10
+
 #define GRAVITY_ACCELERATION 100
 #define BALL_MAXIMUM_INITIAL_SPEED 350
 
@@ -28,6 +31,7 @@ int INITIAL_SCREEN_HEIGHT = 700;
 #define COLOR_BALL             (Color){ 243, 139, 168, 255 }
 #define COLOR_SLINGSHOT_STRING (Color){ 205, 214, 244, 255 }
 #define COLOR_CLOUD            (Color){ 230, 255, 230, 255 }
+#define COLOR_SCORE            (Color){ 230, 255, 230, 255 }
 
 #define BALL_COOLDOWN 1
 

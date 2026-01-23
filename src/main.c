@@ -44,6 +44,7 @@ void render(State* st) {
   draw_slingshot();
   draw_slingshot_strings();
   draw_ready_ball(st);
+  draw_score(st);
 
   struct Ball* ball = st->balls;
   while (ball) {
