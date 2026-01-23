@@ -55,13 +55,13 @@ void draw_slingshot_strings() {
 
 }
 
-// Draws ball in slingshot focus when cooldown permits, does nothingo otherwise
+// Draws ball in slingshot focus when cooldown permits, does nothing otherwise
 // Balls don't actually exist until they're thrown!
 void draw_ready_ball(State* st) {
   if (st->cooldown_left > 0) return;
 
 
-  // If the mouse is clicked, use its location
+  // If the mouse is clicked, use slingshot focus
   // Otherwise, use the unheld one
   Vector2 t = get_slingshot_focus();
   struct Ball b = (struct Ball){

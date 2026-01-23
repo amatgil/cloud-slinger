@@ -31,6 +31,7 @@ void update(State* st) {
   st->cooldown_left -= DeltaTime;
   st->cooldown_left = MAX(st->cooldown_left, 0);
 
+  check_for_balls_in_clouds(st);
 
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }
@@ -38,8 +39,8 @@ void update(State* st) {
 void render(State* st) {
   float h = (float)GetScreenHeight();
 
-  DrawRectangle(cloud_position_lower(st->cloud_t), (int)(h*CLOUD_LOWER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, COLOR_CLOUD);
-  DrawRectangle(cloud_position_upper(st->cloud_t), (int)(h*CLOUD_UPPER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, COLOR_CLOUD);
+  DrawRectangleRec(cloud_rectangle_lower(st->cloud_t), COLOR_CLOUD);
+  DrawRectangleRec(cloud_rectangle_upper(st->cloud_t), COLOR_CLOUD);
 
   draw_slingshot();
   draw_slingshot_strings();
@@ -59,6 +60,7 @@ void render(State* st) {
   }
 }
 
+
 void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* where) {
   if (strcmp(TextToLower(argv[i]), flag) == 0) {
     if (i+1 >= argc) {
@@ -70,7 +72,6 @@ void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* 
     *where = x;
     i += 1;
   }
-
 }
 
 int main(int argc, char** argv) {
