@@ -28,11 +28,10 @@ void update(State* st) {
   }
   clear_errant_balls(st);
 
-  bool c_now = IsMouseButtonDown(0);
-  bool c_prev = st->clicking_last_frame;
-  if (!c_now  && c_prev) summon_ball(st);
+  if (!IsMouseButtonDown(0) && st->clicking_last_frame) summon_ball(st);
 
-  st->clicking_last_frame = c_now; // for next frame!
+
+  st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }
 
 void render(State* st) {

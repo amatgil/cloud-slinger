@@ -27,7 +27,6 @@ void summon_ball(State* st) {
   int vel_x = -cos(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
   int vel_y = sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
 
-  printf("Summoning ball: vel = (%d, %d), theta = %f\n", vel_x, vel_y, theta);
   add_ball(st, target.x, target.y, vel_x, vel_y);
 
 }
