@@ -48,4 +48,24 @@ void add_ball(State* st, int ball_x, int ball_y, int ball_vel_x, int ball_vel_y)
   prev->next = ball;
 }
 
+void remove_ball(State* st, int index) {
+  struct Ball* prev = NULL;
+  struct Ball* curr = st->balls;
+  while (curr) {
+    if (index == 0) {
+      struct Ball* next = curr->next;
+      if (next == NULL && prev == NULL) {};
+      if (next != NULL && prev == NULL) st->balls = next;
+      if (next == NULL && prev != NULL) prev->next = NULL;
+      if (next != NULL && prev != NULL) prev->next = next;
+
+      free(curr);   // i miss Drop :(
+    }
+    return;
+  }
+  prev = curr;
+  curr = curr->next;
+  index -= 1;
+}
+
 #endif

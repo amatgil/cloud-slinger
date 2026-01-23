@@ -79,6 +79,9 @@ int main(int argc, char** argv) {
   add_ball(&st, 100, 100, 0, -100);
   add_ball(&st, 100, 200, 0, 0);
   add_ball(&st, 100, 300, 0, 0);
+  remove_ball(&st, 0);
+  remove_ball(&st, 0);
+  remove_ball(&st, 0);
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();
     BeginDrawing();
