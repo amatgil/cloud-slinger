@@ -1,5 +1,7 @@
 #pragma once
 
+// Credit to Speykious for this file
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -20,10 +22,6 @@ typedef size_t usize;
 // floats
 typedef float f32;
 typedef double f64;
-
-// boolean
-typedef u8 b8;
-typedef int b32;
 
 #define true 1
 #define false 0
