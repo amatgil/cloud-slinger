@@ -4,8 +4,19 @@
 #include "constants.c"
 #include "definitions.c"
 #include "draw.c"
+#include "raylib.h"
 #include "raymath.h"
 #include <math.h>
+
+// x position
+int cloud_position_lower(float t) {
+  float theta = t*TAU;
+  return (sin(theta) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+}
+int cloud_position_upper(float t) {
+  float theta = t*TAU;
+  return (sin(1.6+theta) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+}
 
 void summon_ball(State* st) {
   Vector2 target = get_slingshot_focus();

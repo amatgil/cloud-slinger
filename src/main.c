@@ -18,7 +18,7 @@ void update(State* st) {
   // t = fract(t+DT*dt)
   st->cloud_t += CLOUD_DT*DeltaTime;
   st->cloud_t = st->cloud_t - (float)(int)st->cloud_t;
-
+  printf("t = %f\n", st->cloud_t);
   struct Ball* ball = st->balls;
   while (ball) {
     ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
@@ -36,10 +36,8 @@ void update(State* st) {
 }
 
 void render(State* st) {
-  float theta = st->cloud_t*2.0*M_PI;
-
-  float lower_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(theta);
-  float upper_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(1.6+theta);
+  float lower_x = cloud_position_lower(st->cloud_t);
+  float upper_x = cloud_position_upper(st->cloud_t);
   float screen_h = (float)GetScreenHeight();
 
   DrawRectangle(lower_x, (int)(screen_h*CLOUD_LOWER_Y), CLOUD_WIDTH, CLOUD_HEIGHT, WHITE);

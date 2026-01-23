@@ -3,11 +3,11 @@
 
 #include <raylib.h>
 
-#define CLOUD_WIDTH  120
+#define CLOUD_WIDTH  50
 #define CLOUD_HEIGHT 25
 // CLOUD_{LOWER, UPPER}_Y are percentages of screenheight
-#define CLOUD_LOWER_Y 0.15
-#define CLOUD_UPPER_Y 0.35
+#define CLOUD_LOWER_Y 0.35
+#define CLOUD_UPPER_Y 0.15
 #define CLOUD_DT 0.1
 #define BALL_RADIUS 8
 
