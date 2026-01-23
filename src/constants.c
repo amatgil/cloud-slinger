@@ -1,6 +1,7 @@
 #pragma once
 
 #include <raylib.h>
+#include "types.c"
 
 #define CLOUD_WIDTH  50
 #define CLOUD_HEIGHT 25
@@ -10,8 +11,8 @@
 #define CLOUD_DT 0.1
 #define BALL_RADIUS 8
 
-int INITIAL_SCREEN_WIDTH  = 350;
-int INITIAL_SCREEN_HEIGHT = 700;
+i32 INITIAL_SCREEN_WIDTH  = 350;
+i32 INITIAL_SCREEN_HEIGHT = 700;
 
 #define SLINGSHOT_WIDTH 160
 #define SLINGSHOT_HEIGHT (SLINGSHOT_WIDTH * 1.14)

@@ -8,15 +8,15 @@
 #include <assert.h>
 
 // x position
-int cloud_position_x(float t, float psi) {
+i32 cloud_position_x(f32 t, f32 psi) {
   return (sin(t*TAU + psi) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
 }
 
-Rectangle cloud_rectangle(float t, float psi, float height_percent) {
-  float h = (float)GetScreenHeight();
+Rectangle cloud_rectangle(f32 t, f32 psi, f32 height_percent) {
+  f32 h = (f32)GetScreenHeight();
   return (Rectangle) {
     .x      = cloud_position_x(t, psi),
-    .y      = (int)(h*height_percent),
+    .y      = (i32)(h*height_percent),
     .width  =  CLOUD_WIDTH,
     .height =  CLOUD_HEIGHT };
 }
@@ -24,7 +24,7 @@ Rectangle cloud_rectangle(float t, float psi, float height_percent) {
 Vector2 get_slingshot_focus() {
   Vector2 anchor_base = SLINGSHOT_CENTER;
 
-  float length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
+  f32 length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
   Vector2 dir =  Vector2Normalize(Vector2Subtract(GetMousePosition(), anchor_base));
   return Vector2Add(anchor_base, Vector2Scale(dir, length));
 }
@@ -34,18 +34,18 @@ void summon_ball(State* st) {
   assert(st != NULL);
 
   Vector2 focus = get_slingshot_focus();
-  float power_factor = (float)Vector2Distance(focus, SLINGSHOT_CENTER) / SLINGSHOT_MAX_RADIUS;
-  float theta = Vector2LineAngle(focus, SLINGSHOT_CENTER) + TAU/2.0;
+  f32 power_factor = (f32)Vector2Distance(focus, SLINGSHOT_CENTER) / SLINGSHOT_MAX_RADIUS;
+  f32 theta = Vector2LineAngle(focus, SLINGSHOT_CENTER) + TAU/2.0;
 
-  int vel_x = -cos(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
-  int vel_y =  sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
+  i32 vel_x = -cos(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
+  i32 vel_y =  sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
 
   add_ball(st, focus.x, focus.y, vel_x, vel_y);
   st->cooldown_left = BALL_COOLDOWN;
 
 }
 
-Rectangle cloud_basket_hitbox(float t, float psi, float y) {
+Rectangle cloud_basket_hitbox(f32 t, f32 psi, f32 y) {
   i32 w = CLOUD_WIDTH *CLOUD_BASKET_PERCENTAGE_X;
   i32 h = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
 
@@ -58,7 +58,7 @@ Rectangle cloud_basket_hitbox(float t, float psi, float y) {
 
 }
 
-bool cloud_basket_collision(struct Ball* ball, float t, float psi, float y) {
+bool cloud_basket_collision(struct Ball* ball, f32 t, f32 psi, f32 y) {
   return false; // TODO
 }
 

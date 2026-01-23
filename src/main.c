@@ -9,14 +9,14 @@
 #include "constants.c"
 #include "domain.c"
 
-float DeltaTime;
+f32 DeltaTime;
 
 bool DebugSymbols = false;
 
 void update(State* st) {
   // t = fract(t+DT*dt)
   st->cloud_t += CLOUD_DT*DeltaTime;
-  st->cloud_t = st->cloud_t - (float)(int)st->cloud_t;
+  st->cloud_t = st->cloud_t - (f32)(i32)st->cloud_t;
   struct Ball* ball = st->balls;
   while (ball) {
     ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
@@ -36,7 +36,7 @@ void update(State* st) {
 }
 
 void render(State* st) {
-  float h = (float)GetScreenHeight();
+  f32 h = (f32)GetScreenHeight();
 
   draw_cloud(st, st->cloud_psi_lower, CLOUD_LOWER_Y);
   draw_cloud(st, st->cloud_psi_upper, CLOUD_UPPER_Y);
@@ -75,7 +75,7 @@ State init() {
 }
 
 
-void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* where) {
+void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, char* flag, i32* where) {
   if (strcmp(TextToLower(argv[i]), flag) == 0) {
     if (i+1 >= argc) {
       printf("'%s' given without actual value\n", flag);
@@ -88,8 +88,8 @@ void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* 
   }
 }
 
-int main(int argc, char** argv) {
-  for (int i = 1; i < argc; ++i) {
+int main(i32 argc, char** argv) {
+  for (i32 i = 1; i < argc; ++i) {
     if (strcmp(TextToLower(argv[i]), "-d") == 0) DebugSymbols = true;
     check_and_set_dim_from_args(i, argc, argv, "-w", &INITIAL_SCREEN_WIDTH);
     check_and_set_dim_from_args(i, argc, argv, "-h", &INITIAL_SCREEN_HEIGHT);

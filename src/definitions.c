@@ -13,12 +13,12 @@ typedef struct {
 } Textures;
 
 typedef struct {
-  float cloud_t; // how far along movement, [0..1)
-  float cloud_psi_lower;
-  float cloud_psi_upper;
+  f32 cloud_t; // how far along movement, [0..1)
+  f32 cloud_psi_lower;
+  f32 cloud_psi_upper;
   struct Ball* balls;
   bool clicking_last_frame; // were we clicking, last frame?
-  float cooldown_left; // how long til you can shoot again
+  f32 cooldown_left; // how long til you can shoot again
   u32 score;
   Textures textures;
 } State ;
@@ -39,14 +39,14 @@ State new_state() {
 }
 
 struct Ball {
-  float x;
-  float y;
-  float vel_x;
-  float vel_y;
+  f32 x;
+  f32 y;
+  f32 vel_x;
+  f32 vel_y;
   struct Ball* next;
 };
 
-void add_ball(State* st, int ball_x, int ball_y, int ball_vel_x, int ball_vel_y) {
+void add_ball(State* st, i32 ball_x, i32 ball_y, i32 ball_vel_x, i32 ball_vel_y) {
   struct Ball* ball = (struct Ball*)malloc(sizeof(struct Ball));
   ball->x = ball_x;
   ball->y = ball_y;

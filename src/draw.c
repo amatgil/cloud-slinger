@@ -9,7 +9,7 @@
 #include "constants.c"
 #include "domain.c"
 
-void draw_cloud(State* st, float psi, float height_percent) {
+void draw_cloud(State* st, f32 psi, f32 height_percent) {
   assert(st != NULL);
   DrawRectangleRec(cloud_rectangle(st->cloud_t, psi, height_percent), COLOR_CLOUD);
 }
@@ -34,7 +34,7 @@ void draw_ball(State* st, struct Ball* ball) {
 
 void draw_slingshot(State* st) {
   assert(st != NULL);
-  int x = (int)((float)GetScreenWidth()/2.0f - (float)SLINGSHOT_WIDTH/2.0);
+  i32 x = (i32)((f32)GetScreenWidth()/2.0f - (f32)SLINGSHOT_WIDTH/2.0);
   Rectangle underlying = (Rectangle){
     .x      = x,
     .y      = GetScreenHeight()-SLINGSHOT_HEIGHT,
@@ -55,10 +55,10 @@ void draw_slingshot_string(Vector2 a, Vector2 b) {
 }
 
 void draw_slingshot_strings() {
-  float x = SLINGSHOT_CENTER.x;
-  float y = SLINGSHOT_CENTER.y;
-  float dx = SLINGSHOT_WIDTH  * SLINGSHOT_STRING_SEPARATION_X;
-  float dy = SLINGSHOT_HEIGHT * SLINGSHOT_STRING_SEPARATION_Y;
+  f32 x = SLINGSHOT_CENTER.x;
+  f32 y = SLINGSHOT_CENTER.y;
+  f32 dx = SLINGSHOT_WIDTH  * SLINGSHOT_STRING_SEPARATION_X;
+  f32 dy = SLINGSHOT_HEIGHT * SLINGSHOT_STRING_SEPARATION_Y;
 
   Vector2 anchor_left  = (Vector2){ .x = x - dx, .y = y + dy };
   Vector2 anchor_right = (Vector2){ .x = x + dx, .y = y + dy };
@@ -107,7 +107,7 @@ void draw_score(State* st) {
   assert(st != NULL);
   char buf[256];
   sprintf(buf, "%d", st->score);
-  int width = MeasureText(buf, SCORE_FONTSIZE);
+  i32 width = MeasureText(buf, SCORE_FONTSIZE);
   DrawText(buf, GetScreenWidth()/2.0 - width/2.0, SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
 
 }
