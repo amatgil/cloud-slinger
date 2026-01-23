@@ -55,6 +55,7 @@ void render(State* st) {
      draw_mouse_circle();
      draw_slingshot_radius();
      draw_numeric_debug_info(st);
+     draw_basket_hitbox(st);
   }
 }
 

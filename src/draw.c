@@ -9,20 +9,6 @@
 #include "constants.c"
 #include "domain.c"
 
-// x position
-int cloud_position(float t, float psi) {
-  return (sin(t*TAU + psi) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
-}
-
-Rectangle cloud_rectangle(float t, float psi, float height_percent) {
-  float h = (float)GetScreenHeight();
-  return (Rectangle) {
-    .x      = cloud_position(t, psi),
-    .y      = (int)(h*height_percent),
-    .width  =  CLOUD_WIDTH,
-    .height =  CLOUD_HEIGHT };
-}
-
 void draw_cloud(State* st, float psi, float height_percent) {
   assert(st != NULL);
   DrawRectangleRec(cloud_rectangle(st->cloud_t, psi, height_percent), COLOR_CLOUD);
@@ -118,6 +104,7 @@ void draw_ready_ball(State* st) {
 }
 
 void draw_score(State* st) {
+  assert(st != NULL);
   char buf[256];
   sprintf(buf, "%d", st->score);
   int width = MeasureText(buf, SCORE_FONTSIZE);
@@ -134,9 +121,22 @@ void draw_slingshot_radius() {
   DrawCircleLines(SLINGSHOT_CENTER.x, SLINGSHOT_CENTER.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
 }
 
-void draw_numeric_debug_info(State* st) {
+void draw_basket_hitbox(State* st) {
+  assert(st != NULL);
 
+  i32 thickness = 2;
+  i32 h = GetScreenHeight();
+
+  Rectangle lower_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_lower, h*CLOUD_LOWER_Y);
+  DrawRectangleLinesEx(lower_basket, thickness, MAGENTA);
+
+  Rectangle upper_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_upper, h*CLOUD_UPPER_Y);
+  DrawRectangleLinesEx(upper_basket, thickness, MAGENTA);
+}
+
+void draw_numeric_debug_info(State* st) {
   char buf[256];
+
   sprintf(buf, "Cooldown: %.3f", st->cooldown_left);
   DrawText(buf, 5, 5+12*0, 12, WHITE);
 
@@ -145,5 +145,4 @@ void draw_numeric_debug_info(State* st) {
 
   sprintf(buf, "Num balls: %d", count_balls(st));
   DrawText(buf, 5, 5+12*2, 12, WHITE);
-
 }
