@@ -1,9 +1,10 @@
 #include <raylib.h>
 #include <raymath.h>
-#include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
+#include <string.h>
 #include <sys/param.h>
-#include "balls.c"
+#include "definitions.c"
 #include "draw.c"
 #include "constants.c"
 
@@ -11,42 +12,21 @@ float DeltaTime;
 
 bool DebugSymbols = false;
 
-State new_state() {
-  return (State){0.0, NULL, (Vector2){0.0, 0.0} };
-}
-
-void add_ball(State* st, int ball_x, int ball_y, int ball_vel_x, int ball_vel_y) {
-  struct Ball* ball = (struct Ball*)malloc(sizeof(struct Ball));
-  ball->x = ball_x;
-  ball->y = ball_y;
-  ball->vel_x = ball_vel_x;
-  ball->vel_y = ball_vel_y;
-  ball->next = NULL;
-
-  struct Ball* prev = st->balls;
-  struct Ball* curr = NULL;
-  if (!prev) {
-    st->balls = ball;
-    return;
-  }
-
-  curr = prev->next;
-  while (curr) {
-    prev = curr;
-    curr = curr->next;
-  }
-
-  prev->next = ball;
-}
-
 void update(State* st) {
   // t = fract(t+DT*dt)
   st->cloud_t += CLOUD_DT*DeltaTime;
   st->cloud_t = st->cloud_t - (float)(int)st->cloud_t;
+
+  struct Ball* ball = st->balls;
+  while (ball) {
+      ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
+      ball->y     += ball->vel_y*DeltaTime;
+      ball->x     += ball->vel_x*DeltaTime;
+      ball = ball->next;
+  }
 }
 
 void render(State* st) {
-  // idea: e^(-f(x)^2) where f(x) = max(x+a, 0) + min(x-a,0)
   float theta = st->cloud_t*2.0*M_PI;
 
   float lower_x = (float)CLOUD_WIDTH + ((float)GetScreenWidth() - 2.0f*(float)CLOUD_WIDTH)*sin(theta);
@@ -71,16 +51,20 @@ void render(State* st) {
 
 
 
-int main(void) {
+int main(int argc, char** argv) {
+  if (argc > 1) {
+      if (strcmp(argv[1], "DEBUG") == 0) DebugSymbols = true;
+  }
+
   State st = new_state();
 
   InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
 
   SetTargetFPS(60.0);
 
-  add_ball(&st, 100, 100, 10, 10);
-  add_ball(&st, 100, 200, 10, 10);
-  add_ball(&st, 100, 300, 10, 10);
+  add_ball(&st, 100, 100, 0, -100);
+  add_ball(&st, 100, 200, 0, 0);
+  add_ball(&st, 100, 300, 0, 0);
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();
     BeginDrawing();

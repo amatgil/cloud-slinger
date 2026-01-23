@@ -20,11 +20,6 @@
 #define SLINGSHOT_STRING_COLOR WHITE
 #define SLINGSHOT_MAX_RADIUS 100
 
-typedef struct {
-  float cloud_t; // how far along movement, [0..1)
-  struct Ball* balls;
-  Vector2 held_position; // (-1, -1) si no està held
-} State ;
-
+#define GRAVITY_ACCELERATION 100
 
 #endif
