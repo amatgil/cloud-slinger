@@ -5,15 +5,18 @@
 #include <sys/param.h>
 #include <stdlib.h>
 
+#define TAU 6.28318530717958647692
+
+#define NOTHING_HELD (Vector2){-1, -1}
 typedef struct {
   float cloud_t; // how far along movement, [0..1)
   struct Ball* balls;
-  Vector2 held_position; // (-1, -1) si no està held
+  bool clicking_last_frame; // were we clicking, last frame?
 } State ;
 
 
 State new_state() {
-  return (State){0.0, NULL, (Vector2){0.0, 0.0} };
+  return (State){0.0, NULL, false };
 }
 
 struct Ball {

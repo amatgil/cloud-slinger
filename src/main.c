@@ -8,6 +8,7 @@
 #include "definitions.c"
 #include "draw.c"
 #include "constants.c"
+#include "domain.c"
 
 float DeltaTime;
 
@@ -25,6 +26,13 @@ void update(State* st) {
     ball->x     += ball->vel_x*DeltaTime;
     ball = ball->next;
   }
+  clear_errant_balls(st);
+
+  bool c_now = IsMouseButtonDown(0);
+  bool c_prev = st->clicking_last_frame;
+  if (!c_now  && c_prev) summon_ball(st);
+
+  st->clicking_last_frame = c_now; // for next frame!
 }
 
 void render(State* st) {
@@ -48,7 +56,10 @@ void render(State* st) {
     ball = ball->next;
   }
 
-  if (DebugSymbols) draw_mouse_circle();
+  if (DebugSymbols) {
+     draw_mouse_circle();
+     draw_slingshot_radius();
+  }
 }
 
 void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* where) {
@@ -57,6 +68,7 @@ void check_and_set_dim_from_args(int i, int argc, char** argv, char* flag, int* 
       printf("'%s' given without actual value\n", flag);
       exit(1);
     }
+    // TODO: Actual error checking
     long x = strtol(argv[i+1], NULL, 10); // Assumeixo que és correcte perquè C va com vol
     *where = x;
     i += 1;

@@ -25,10 +25,13 @@ void draw_slingshot_string(Vector2 a, Vector2 b) {
   DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, COLOR_SLINGSHOT_STRING);
 }
 
+Vector2 get_slingshot_center() {
+  return (Vector2){.x = GetScreenWidth()/2.0, .y = GetScreenHeight()-SLINGSHOT_HEIGHT};
+}
 Vector2 get_slingshot_focus() {
-  float x = GetScreenWidth()/2.0;
+  float x = get_slingshot_center().x;
+  float y = get_slingshot_center().y;
   float dx = SLINGSHOT_WIDTH/2.0;
-  float y = GetScreenHeight()-SLINGSHOT_HEIGHT;
 
   Vector2 anchor_base = (Vector2){ .x = x, .y = y };
 
@@ -80,6 +83,11 @@ void draw_ready_ball() {
 void draw_mouse_circle() {
   Vector2 pos = GetMousePosition();
   DrawCircle(pos.x, pos.y, 5, (Color){255, 255, 255, 80});
+}
+
+void draw_slingshot_radius() {
+  Vector2 p = get_slingshot_center();
+  DrawCircleLines(p.x, p.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
 }
 
 #endif
