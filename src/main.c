@@ -36,8 +36,8 @@ void update(State* st) {
 void render(State* st) {
   f32 h = (f32)GetScreenHeight();
 
-  draw_cloud(st, st->cloud_psi_lower, CLOUD_LOWER_Y);
-  draw_cloud(st, st->cloud_psi_upper, CLOUD_UPPER_Y);
+  draw_cloud(st, st->cloud_psi_lower, CLOUD_LOWER_Y_PERCENTAGE);
+  draw_cloud(st, st->cloud_psi_upper, CLOUD_UPPER_Y_PERCENTAGE);
   draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);

@@ -127,10 +127,10 @@ void draw_basket_hitbox(State* st) {
   i32 thickness = 2;
   i32 h = GetScreenHeight();
 
-  Rectangle lower_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_lower, h*CLOUD_LOWER_Y);
+  Rectangle lower_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_lower, h*CLOUD_LOWER_Y_PERCENTAGE);
   DrawRectangleLinesEx(lower_basket, thickness, MAGENTA);
 
-  Rectangle upper_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_upper, h*CLOUD_UPPER_Y);
+  Rectangle upper_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_upper, h*CLOUD_UPPER_Y_PERCENTAGE);
   DrawRectangleLinesEx(upper_basket, thickness, MAGENTA);
 }
 

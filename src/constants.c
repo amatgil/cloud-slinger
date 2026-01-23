@@ -3,12 +3,15 @@
 #include <raylib.h>
 #include "types.c"
 
-#define CLOUD_WIDTH  50
+#define CLOUD_WIDTH  60
 #define CLOUD_HEIGHT 25
 // CLOUD_{LOWER, UPPER}_Y are percentages of screenheight
-#define CLOUD_LOWER_Y 0.35
-#define CLOUD_UPPER_Y 0.15
+#define CLOUD_LOWER_Y_PERCENTAGE 0.35
+#define CLOUD_UPPER_Y_PERCENTAGE 0.15
 #define CLOUD_DT 0.1
+#define CLOUD_BASKET_PERCENTAGE_X 0.7
+#define CLOUD_BASKET_PERCENTAGE_Y 0.7
+
 #define BALL_RADIUS 8
 
 i32 INITIAL_SCREEN_WIDTH  = 350;
@@ -21,9 +24,6 @@ i32 INITIAL_SCREEN_HEIGHT = 700;
 #define SLINGSHOT_STRING_SEPARATION_Y 0.02
 #define SLINGSHOT_MAX_RADIUS 150
 #define SLINGSHOT_CENTER (Vector2){.x = GetScreenWidth()/2.0, .y = GetScreenHeight()-SLINGSHOT_HEIGHT}
-
-#define CLOUD_BASKET_PERCENTAGE_X 0.7
-#define CLOUD_BASKET_PERCENTAGE_Y 0.7
 
 #define SCORE_FONTSIZE  20
 #define SCORE_PADDING_Y 10

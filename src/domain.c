@@ -77,13 +77,13 @@ void handle_ball_cloud_baskets(State* st) {
   struct Ball* b = st->balls;
   while (b) {
     if (b->vel_y > 0) {
-      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_lower, GetScreenHeight()*CLOUD_LOWER_Y)) {
+      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_lower, GetScreenHeight()*CLOUD_LOWER_Y_PERCENTAGE)) {
         if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with lower cloud\n", b->x, b->y, index);
         st->score += POINTS_FOR_LOWER;
         remove_ball(st, index);
         return;
       }
-      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_upper, GetScreenHeight()*CLOUD_UPPER_Y)) {
+      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_upper, GetScreenHeight()*CLOUD_UPPER_Y_PERCENTAGE)) {
         if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with upper cloud\n", b->x, b->y, index);
         st->score += POINTS_FOR_UPPER;
         remove_ball(st, index);
