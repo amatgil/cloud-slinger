@@ -26,15 +26,8 @@ void draw_slingshot_string(Vector2 a, Vector2 b) {
   DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, COLOR_SLINGSHOT_STRING);
 }
 
-Vector2 get_slingshot_center() {
-  return (Vector2){.x = GetScreenWidth()/2.0, .y = GetScreenHeight()-SLINGSHOT_HEIGHT};
-}
 Vector2 get_slingshot_focus() {
-  float x = get_slingshot_center().x;
-  float y = get_slingshot_center().y;
-  float dx = SLINGSHOT_WIDTH/2.0;
-
-  Vector2 anchor_base = (Vector2){ .x = x, .y = y };
+  Vector2 anchor_base = SLINGSHOT_CENTER;
 
   float length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
   Vector2 dir =  Vector2Normalize(Vector2Subtract(GetMousePosition(), anchor_base));
@@ -42,8 +35,8 @@ Vector2 get_slingshot_focus() {
 }
 
 void draw_slingshot_strings() {
-  float x = get_slingshot_center().x;
-  float y = get_slingshot_center().y;
+  float x = SLINGSHOT_CENTER.x;
+  float y = SLINGSHOT_CENTER.y;
   float dx = SLINGSHOT_WIDTH/2.0;
 
   Vector2 anchor_left  = (Vector2){ .x = x - dx, .y = y };
@@ -67,10 +60,10 @@ void draw_slingshot_strings() {
 void draw_ready_ball(State* st) {
   if (st->cooldown_left > 0) return;
 
-  Vector2 t = get_slingshot_focus();
 
-  // Passing a pointer to the stack, but the function doesn't keep it around, so it's fine
-  // I miss the borrow checker
+  // If the mouse is clicked, use its location
+  // Otherwise, use the unheld one
+  Vector2 t = get_slingshot_focus();
   struct Ball b = (struct Ball){
     .x     = t.x,
     .y     = t.y,
@@ -78,10 +71,14 @@ void draw_ready_ball(State* st) {
     .vel_y = 0,
     .next  = NULL
   };
+
   if (!IsMouseButtonDown(0)) {
-    b.x = get_slingshot_center().x;
-    b.y = get_slingshot_center().y + SLINGSHOT_MAX_RADIUS;
+    b.x = SLINGSHOT_CENTER.x;
+    b.y = SLINGSHOT_CENTER.y + SLINGSHOT_MAX_RADIUS;
   };
+
+  // Passing a pointer to the stack, but the function doesn't keep it around, so it's fine
+  // I miss the borrow checker
   draw_ball(&b);
 }
 
@@ -91,8 +88,7 @@ void draw_mouse_circle() {
 }
 
 void draw_slingshot_radius() {
-  Vector2 p = get_slingshot_center();
-  DrawCircleLines(p.x, p.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
+  DrawCircleLines(SLINGSHOT_CENTER.x, SLINGSHOT_CENTER.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
 }
 
 void draw_numeric_debug_info(State* st) {

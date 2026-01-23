@@ -19,15 +19,14 @@ int cloud_position_upper(float t) {
 }
 
 void summon_ball(State* st) {
-  Vector2 target = get_slingshot_focus();
-  Vector2 center = get_slingshot_center();
-  float power_factor = (float)Vector2Distance(target, center) / SLINGSHOT_MAX_RADIUS;
-  float theta = Vector2LineAngle(target, center) + TAU/2.0;
+  Vector2 focus = get_slingshot_focus();
+  float power_factor = (float)Vector2Distance(focus, SLINGSHOT_CENTER) / SLINGSHOT_MAX_RADIUS;
+  float theta = Vector2LineAngle(focus, SLINGSHOT_CENTER) + TAU/2.0;
 
   int vel_x = -cos(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
   int vel_y = sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
 
-  add_ball(st, target.x, target.y, vel_x, vel_y);
+  add_ball(st, focus.x, focus.y, vel_x, vel_y);
   st->cooldown_left = BALL_COOLDOWN;
 
 }
