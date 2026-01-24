@@ -28,7 +28,9 @@ void draw_ball(State* st, struct Ball* ball) {
     st->textures.ball,
     (Rectangle){ .x = 0.0, .y = 0.0, .width = st->textures.ball.width, .height = st->textures.ball.height},
     underlying,
-    Vector2Zero(), 0.0, WHITE);
+    Vector2Zero(),
+    ball->angle * RAD2DEG,
+    WHITE);
   if(st->debug_mode) DrawCircle(ball->x, ball->y, BALL_RADIUS, (Color){255, 0, 0, 100});
 }
 

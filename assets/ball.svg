@@ -27,8 +27,8 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="0.55559665"
-     inkscape:cx="489.56378"
-     inkscape:cy="687.54914"
+     inkscape:cx="612.85467"
+     inkscape:cy="547.15953"
      inkscape:window-width="1912"
      inkscape:window-height="1052"
      inkscape:window-x="1680"
@@ -42,10 +42,17 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#ff2828;fill-opacity:1;stroke:#000000;stroke-width:37.6464;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#ff2828;fill-opacity:1;stroke:#000000;stroke-width:55.0475;stroke-dasharray:none;stroke-opacity:1"
        id="path1"
-       cx="150"
-       cy="150"
-       r="131.1768" />
+       cx="149.52379"
+       cy="149.52379"
+       r="121.47072" />
+    <ellipse
+       style="fill:#ffffff;fill-opacity:0.953392;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       id="path2"
+       cx="105.00536"
+       cy="122.09248"
+       rx="36.430428"
+       ry="37.326263" />
   </g>
 </svg>

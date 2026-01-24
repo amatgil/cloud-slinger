@@ -23,6 +23,7 @@ void update(State* st) {
     ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
     ball->y     += ball->vel_y*DeltaTime;
     ball->x     += ball->vel_x*DeltaTime;
+    ball->angle += BALL_ROTATE_SPEED*DeltaTime;
     ball = ball->next;
   }
   clear_errant_balls(st);

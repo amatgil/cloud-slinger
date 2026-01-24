@@ -26,6 +26,7 @@
 
 #define GRAVITY_ACCELERATION 300
 #define BALL_MAXIMUM_INITIAL_SPEED 600
+#define BALL_ROTATE_SPEED -3.5
 
 #define COLOR_BACKGROUND       (Color){ 24,   24,  37, 255 }
 #define COLOR_SLINGSHOT        (Color){ 137, 180, 250, 255 }

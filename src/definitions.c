@@ -45,6 +45,7 @@ struct Ball {
   f32 y;
   f32 vel_x;
   f32 vel_y;
+  f32 angle;
   struct Ball* next;
 };
 
@@ -54,6 +55,7 @@ void add_ball(State* st, i32 ball_x, i32 ball_y, i32 ball_vel_x, i32 ball_vel_y)
   ball->y = ball_y;
   ball->vel_x = ball_vel_x;
   ball->vel_y = ball_vel_y;
+  ball->angle = 0;
   ball->next = NULL;
 
   struct Ball* prev = st->balls;
