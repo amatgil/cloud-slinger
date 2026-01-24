@@ -12,13 +12,22 @@ typedef struct {
   Texture2D ball;
 } Textures;
 
+typedef struct Ball {
+  f32 x;
+  f32 y;
+  f32 vel_x;
+  f32 vel_y;
+  f32 angle;
+  struct Ball* next;
+} Ball;
+
 typedef struct {
   bool debug_mode;
   bool paused;
   f32 cloud_t; // how far along movement, [0..1)
   f32 cloud_psi_lower;
   f32 cloud_psi_upper;
-  struct Ball* balls;
+  Ball* balls;
   bool clicking_last_frame; // were we clicking, last frame?
   f32 cooldown_left; // how long til you can shoot again
   u32 score;
@@ -42,17 +51,9 @@ State new_state() {
   };
 }
 
-struct Ball {
-  f32 x;
-  f32 y;
-  f32 vel_x;
-  f32 vel_y;
-  f32 angle;
-  struct Ball* next;
-};
 
 void add_ball(State* st, i32 ball_x, i32 ball_y, i32 ball_vel_x, i32 ball_vel_y) {
-  struct Ball* ball = (struct Ball*)malloc(sizeof(struct Ball));
+  Ball* ball = (Ball*)malloc(sizeof(Ball));
   ball->x = ball_x;
   ball->y = ball_y;
   ball->vel_x = ball_vel_x;
@@ -60,8 +61,8 @@ void add_ball(State* st, i32 ball_x, i32 ball_y, i32 ball_vel_x, i32 ball_vel_y)
   ball->angle = 0;
   ball->next = NULL;
 
-  struct Ball* prev = st->balls;
-  struct Ball* curr = NULL;
+  Ball* prev = st->balls;
+  Ball* curr = NULL;
   if (!prev) {
     st->balls = ball;
     return;
@@ -78,7 +79,7 @@ void add_ball(State* st, i32 ball_x, i32 ball_y, i32 ball_vel_x, i32 ball_vel_y)
 
 u32 count_balls(State* st) {
   u32 count = 0;
-  struct Ball* b = st->balls;
+  Ball* b = st->balls;
   while (b) {
     count += 1;
     b = b->next;
@@ -88,11 +89,11 @@ u32 count_balls(State* st) {
 }
 
 void remove_ball(State* st, u32 index) {
-  struct Ball* prev = NULL;
-  struct Ball* curr = st->balls;
+  Ball* prev = NULL;
+  Ball* curr = st->balls;
   while (curr) {
     if (index == 0) {
-      struct Ball* next = curr->next;
+      Ball* next = curr->next;
       if (next == NULL && prev == NULL) st->balls = NULL;
       if (next != NULL && prev == NULL) st->balls = next;
       if (next == NULL && prev != NULL) prev->next = NULL;

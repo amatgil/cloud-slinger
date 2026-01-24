@@ -15,7 +15,7 @@ void draw_cloud(State* st, f32 psi, f32 height_percent) {
 }
 
 
-void draw_ball(State* st, struct Ball* ball) {
+void draw_ball(State* st, Ball* ball) {
   assert(st != NULL);
   assert(ball != NULL);
   Rectangle underlying = (Rectangle){
@@ -89,7 +89,7 @@ void draw_ready_ball(State* st) {
   // If the mouse is clicked, use slingshot focus
   // Otherwise, use the unheld one
   Vector2 t = get_slingshot_focus();
-  struct Ball b = (struct Ball){
+  Ball b = (Ball){
     .x     = t.x,
     .y     = t.y,
     .vel_x = 0,

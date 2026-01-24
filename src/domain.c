@@ -60,7 +60,7 @@ Rectangle cloud_basket_hitbox(f32 t, f32 psi, f32 y) {
 }
 
 // Is there a collision between the cloud defined by (t, psi, y) and ball?
-bool cloud_basket_collision(struct Ball* ball, f32 t, f32 psi, f32 y) {
+bool cloud_basket_collision(Ball* ball, f32 t, f32 psi, f32 y) {
   assert(ball != NULL);
   Rectangle hitbox = cloud_basket_hitbox(t, psi, y);
   Vector2 pos = (Vector2){.x = ball->x, .y = ball->y};
@@ -74,7 +74,7 @@ void handle_ball_cloud_baskets(State* st) {
   assert(st != NULL);
 
   u32 index = 0;
-  struct Ball* b = st->balls;
+  Ball* b = st->balls;
   while (b) {
     if (b->vel_y > 0) {
       if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_lower, GetScreenHeight()*CLOUD_LOWER_Y_PERCENTAGE)) {
@@ -100,7 +100,7 @@ void handle_ball_cloud_baskets(State* st) {
 // deletes a maximum of ONE ball
 void clear_errant_balls(State* st) {
   assert(st != NULL);
-  struct Ball* b = st->balls;
+  Ball* b = st->balls;
   u32 index = 0;
   while (b) {
     if (fabs(b->x) > 20*GetScreenWidth() || fabs(b->y) > 20*GetScreenHeight()) {

@@ -18,7 +18,7 @@ void update(State* st) {
   // t = fract(t+DT*dt)
   st->cloud_t += CLOUD_DT*DeltaTime;
   st->cloud_t = st->cloud_t - (f32)(i32)st->cloud_t;
-  struct Ball* ball = st->balls;
+  Ball* ball = st->balls;
   while (ball) {
     ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
     ball->y     += ball->vel_y*DeltaTime;
@@ -47,7 +47,7 @@ void render(State* st) {
   draw_ready_ball(st);
   draw_score(st);
 
-  struct Ball* ball = st->balls;
+  Ball* ball = st->balls;
   while (ball) {
     draw_ball(st, ball);
     ball = ball->next;
