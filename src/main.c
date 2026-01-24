@@ -105,8 +105,13 @@ void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, char* flag, i32* 
       printf("'%s' given without actual value\n", flag);
       exit(1);
     }
-    // TODO: Actual error checking
-    long x = strtol(argv[i+1], NULL, 10); // Assumeixo que és correcte perquè C va com vol
+
+    char* endptr;
+    i32 x = strtol(argv[i+1], &endptr, 10); // Assumeixo que és correcte perquè C va com vol
+    if (*endptr != 0) {
+      printf("'The argument of '%s' ('%s') was not a valid integer\n", flag, argv[i+1]);
+      exit(2);
+    }
     *where = x;
     i += 1;
   }
@@ -121,6 +126,10 @@ int main(i32 argc, char** argv) {
   }
 
   State st = init(debug_mode);
+
+  if (st.debug_mode) {
+    printf("Initializing with width=%d and height=%d\n", INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT);
+  }
 
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();
