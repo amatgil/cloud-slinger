@@ -59,11 +59,13 @@ Rectangle basket_hitbox(Basket* basket) {
   switch (basket->kind) {
     case BK_Cloud: {
       BasketCloud* c = (BasketCloud*)&basket->data;
+      f32 padding_x = (basket->apparent_width - basket->hitbox_width)/2.0;
+      f32 padding_y = (basket->apparent_height - basket->hitbox_height); // Flush against bottom
       Rectangle r =  (Rectangle) {
-        .x = cloud_position_x(c->t, c->psi) + (basket->hitbox_width)/2.0,
-        .y = c->y,
-        .width  = basket->apparent_width,
-        .height = basket->apparent_height,
+        .x = cloud_position_x(c->t, c->psi) + padding_x,
+        .y = c->y + padding_y,
+        .width  = basket->hitbox_width,
+        .height = basket->hitbox_height,
       };
       return r;
     }

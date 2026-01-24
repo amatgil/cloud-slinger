@@ -21,10 +21,10 @@ void draw_basket(Basket* basket) {
         basket->texture,
         (Rectangle){ .x = 0.0, .y = 0.0, .width = tex->width, .height = tex->height},
         (Rectangle){
-          .x = cloud_position_x(c->t, c->psi),
-          .y = c->y,
-          .width = basket->apparent_width,
-          .height = basket->apparent_width},
+          .x      = cloud_position_x(c->t, c->psi),
+          .y      = c->y,
+          .width  = basket->apparent_width,
+          .height = basket->apparent_height},
         Vector2Zero(), 0.0, WHITE);
       break;
     }
