@@ -16,8 +16,6 @@ i32 INITIAL_SCREEN_HEIGHT = 700;
 
 void update(State* st) {
   // t = fract(t+DT*dt)
-  st->cloud_t += CLOUD_DT*DeltaTime;
-  st->cloud_t = st->cloud_t - (f32)(i32)st->cloud_t;
   Ball* ball = st->balls;
   while (ball) {
     ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
@@ -28,11 +26,17 @@ void update(State* st) {
   }
   clear_errant_balls(st);
 
+  Basket* basket = st->baskets;
+  while (basket) {
+    update_basket_position(basket, DeltaTime);
+    basket = basket->next;
+  }
+
   if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->cooldown_left == 0) summon_ball(st);
   st->cooldown_left -= DeltaTime;
   st->cooldown_left = MAX(st->cooldown_left, 0);
 
-  handle_ball_cloud_baskets(st);
+  handle_ball_baskets_collisions(st);
 
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }
@@ -40,8 +44,6 @@ void update(State* st) {
 void render(State* st) {
   f32 h = (f32)GetScreenHeight();
 
-  draw_cloud(st, st->cloud_psi_lower, CLOUD_LOWER_Y_PERCENTAGE);
-  draw_cloud(st, st->cloud_psi_upper, CLOUD_UPPER_Y_PERCENTAGE);
   draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);
@@ -53,11 +55,23 @@ void render(State* st) {
     ball = ball->next;
   }
 
+  Basket* basket = st->baskets;
+  while (basket) {
+    draw_basket(basket);
+    basket = basket->next;
+  }
+
   if (st->debug_mode) {
      draw_mouse_circle();
      draw_slingshot_radius();
      draw_numeric_debug_info(st);
-     draw_basket_hitbox(st);
+
+     Basket* basket = st->baskets;
+     while (basket) {
+       draw_basket_hitbox(basket);
+       basket = basket->next;
+     }
+
   }
 }
 
@@ -74,6 +88,29 @@ State init(bool debug_mode) {
   st.textures.slingshot = slingshot;
   st.textures.ball      = ball;
 
+  Basket* cloud_lower = malloc(sizeof(Basket));
+  cloud_lower->kind = BK_Cloud;
+  cloud_lower->data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = 0.0, .y = CLOUD_LOWER_Y_PERCENTAGE*GetScreenHeight()} };
+  cloud_lower->apparent_width = CLOUD_WIDTH;
+  cloud_lower->apparent_height = CLOUD_HEIGHT;
+  cloud_lower->hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X;
+  cloud_lower->hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
+  cloud_lower->points = 1;
+  cloud_lower->texture = ball; // temporary
+  cloud_lower->next = NULL;
+
+  Basket* cloud_higher = malloc(sizeof(Basket));
+  cloud_higher->kind = BK_Cloud;
+  cloud_higher->data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = 1.6, .y = CLOUD_UPPER_Y_PERCENTAGE*GetScreenHeight()} };
+  cloud_higher->apparent_width = CLOUD_WIDTH;
+  cloud_higher->apparent_height = CLOUD_HEIGHT;
+  cloud_higher->hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X;
+  cloud_higher->hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
+  cloud_higher->points = 2;
+  cloud_higher->texture = ball; // temporary
+  cloud_higher->next = cloud_lower;
+
+  st.baskets = cloud_higher;
   return st;
 }
 
@@ -105,6 +142,7 @@ int main(i32 argc, char** argv) {
     DeltaTime = GetFrameTime();
     if (!st.paused) update(&st);
     if (IsKeyPressed(KEY_SPACE)) st.paused = !st.paused;
+    if (IsKeyPressed(KEY_D))     st.debug_mode = !st.debug_mode;
 
     BeginDrawing();
     ClearBackground(COLOR_BACKGROUND);

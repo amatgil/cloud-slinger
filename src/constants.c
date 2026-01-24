@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include "types.c"
 
+#define TAU 6.28318530717958647692
+
 #define CLOUD_WIDTH  60
 #define CLOUD_HEIGHT 25
 #define CLOUD_LOWER_Y_PERCENTAGE 0.35

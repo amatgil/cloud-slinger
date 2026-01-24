@@ -4,8 +4,7 @@
 #include <sys/param.h>
 #include <stdlib.h>
 #include "types.c"
-
-#define TAU 6.28318530717958647692
+#include "baskets.c"
 
 typedef struct {
   Texture2D slingshot;
@@ -24,14 +23,12 @@ typedef struct Ball {
 typedef struct {
   bool debug_mode;
   bool paused;
-  f32 cloud_t; // how far along movement, [0..1)
-  f32 cloud_psi_lower;
-  f32 cloud_psi_upper;
   Ball* balls;
   bool clicking_last_frame; // were we clicking, last frame?
   f32 cooldown_left; // how long til you can shoot again
   u32 score;
   Textures textures;
+  Basket* baskets;
 } State ;
 
 
@@ -40,9 +37,7 @@ State new_state() {
   return (State){
     .debug_mode = false,
     .paused = false,
-    .cloud_t = 0.0,
-    .cloud_psi_lower = 0.0,
-    .cloud_psi_upper = TAU/4 + 0.1,
+    .baskets = NULL,
     .balls = NULL,
     .clicking_last_frame = false,
     .cooldown_left = 0.0,
@@ -84,7 +79,15 @@ u32 count_balls(State* st) {
     count += 1;
     b = b->next;
   }
-
+  return count;
+}
+u32 count_baskets(State* st) {
+  u32 count = 0;
+  Basket* b = st->baskets;
+  while (b) {
+    count += 1;
+    b = b->next;
+  }
   return count;
 }
 

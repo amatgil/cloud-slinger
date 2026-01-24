@@ -9,9 +9,31 @@
 #include "constants.c"
 #include "domain.c"
 
-void draw_cloud(State* st, f32 psi, f32 height_percent) {
-  assert(st != NULL);
-  DrawRectangleRec(cloud_rectangle(st->cloud_t, psi, height_percent), COLOR_CLOUD);
+void draw_basket(Basket* basket) {
+  assert(basket != NULL);
+  //DrawRectangleRec(cloud_rectangle(st->cloud_t, psi, height_percent), COLOR_CLOUD);
+
+  switch (basket->kind) {
+    case BK_Cloud: {
+      BasketCloud* c = (BasketCloud*)&basket->data;
+      Texture2D* tex = &basket->texture;
+      DrawTexturePro(
+        basket->texture,
+        (Rectangle){ .x = 0.0, .y = 0.0, .width = tex->width, .height = tex->height},
+        (Rectangle){
+          .x = cloud_position_x(c->t, c->psi),
+          .y = c->y,
+          .width = basket->apparent_width,
+          .height = basket->apparent_width},
+        Vector2Zero(), 0.0, WHITE);
+      break;
+    }
+
+    case BK_Bird: {
+      assert(false);
+      break;
+    }
+  }
 }
 
 
@@ -124,17 +146,11 @@ void draw_slingshot_radius() {
   DrawCircleLines(SLINGSHOT_CENTER.x, SLINGSHOT_CENTER.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
 }
 
-void draw_basket_hitbox(State* st) {
-  assert(st != NULL);
+void draw_basket_hitbox(Basket* basket) {
+  assert(basket != NULL);
 
-  i32 thickness = 2;
-  i32 h = GetScreenHeight();
-
-  Rectangle lower_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_lower, h*CLOUD_LOWER_Y_PERCENTAGE);
-  DrawRectangleLinesEx(lower_basket, thickness, MAGENTA);
-
-  Rectangle upper_basket = cloud_basket_hitbox(st->cloud_t, st->cloud_psi_upper, h*CLOUD_UPPER_Y_PERCENTAGE);
-  DrawRectangleLinesEx(upper_basket, thickness, MAGENTA);
+  Rectangle hitbox = basket_hitbox(basket);
+  DrawRectangleLinesEx(hitbox, 2, MAGENTA);
 }
 
 void draw_numeric_debug_info(State* st) {
@@ -143,7 +159,7 @@ void draw_numeric_debug_info(State* st) {
   sprintf(buf, "Cooldown: %.3f", st->cooldown_left);
   DrawText(buf, 5, 5+12*0, 12, WHITE);
 
-  sprintf(buf, "Cloud t: %.3f", st->cloud_t);
+  sprintf(buf, "Num baskets: %d", count_baskets(st));
   DrawText(buf, 5, 5+12*1, 12, WHITE);
 
   sprintf(buf, "Num balls: %d", count_balls(st));

@@ -8,20 +8,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-// x position
-i32 cloud_position_x(f32 t, f32 psi) {
-  return (sin(t*TAU + psi) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
-}
-
-Rectangle cloud_rectangle(f32 t, f32 psi, f32 height_percent) {
-  f32 h = (f32)GetScreenHeight();
-  return (Rectangle) {
-    .x      = cloud_position_x(t, psi),
-    .y      = (i32)(h*height_percent),
-    .width  =  CLOUD_WIDTH,
-    .height =  CLOUD_HEIGHT };
-}
-
 Vector2 get_slingshot_focus() {
   Vector2 anchor_base = SLINGSHOT_CENTER;
 
@@ -29,7 +15,6 @@ Vector2 get_slingshot_focus() {
   Vector2 dir =  Vector2Normalize(Vector2Subtract(GetMousePosition(), anchor_base));
   return Vector2Add(anchor_base, Vector2Scale(dir, length));
 }
-
 
 void summon_ball(State* st) {
   assert(st != NULL);
@@ -43,26 +28,13 @@ void summon_ball(State* st) {
 
   add_ball(st, focus.x, focus.y, vel_x, vel_y);
   st->cooldown_left = BALL_COOLDOWN;
-
-}
-
-Rectangle cloud_basket_hitbox(f32 t, f32 psi, f32 y) {
-  i32 w = CLOUD_WIDTH *CLOUD_BASKET_PERCENTAGE_X;
-  i32 h = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
-
-  return (Rectangle){
-    .x = cloud_position_x(t, psi) + (CLOUD_WIDTH-w)/2.0,
-    .y = y,
-    .width  = w,
-    .height = h,
-  };
-
 }
 
 // Is there a collision between the cloud defined by (t, psi, y) and ball?
-bool cloud_basket_collision(Ball* ball, f32 t, f32 psi, f32 y) {
+bool ball_basket_collision(Ball* ball, Basket* basket) {
   assert(ball != NULL);
-  Rectangle hitbox = cloud_basket_hitbox(t, psi, y);
+  assert(basket != NULL);
+  Rectangle hitbox = basket_hitbox(basket);
   Vector2 pos = (Vector2){.x = ball->x, .y = ball->y};
 
   return CheckCollisionCircleRec(pos, BALL_RADIUS, hitbox);
@@ -70,28 +42,27 @@ bool cloud_basket_collision(Ball* ball, f32 t, f32 psi, f32 y) {
 
 // only handles _one_ ball. if there are more, the first one in the
 // list will get handled
-void handle_ball_cloud_baskets(State* st) {
+void handle_ball_baskets_collisions(State* st) {
   assert(st != NULL);
 
+  // forall ball, foreach basket, check collision
   u32 index = 0;
-  Ball* b = st->balls;
-  while (b) {
-    if (b->vel_y > 0) {
-      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_lower, GetScreenHeight()*CLOUD_LOWER_Y_PERCENTAGE)) {
-        if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with lower cloud\n", b->x, b->y, index);
-        st->score += POINTS_FOR_LOWER;
-        remove_ball(st, index);
-        return;
-      }
-      if (cloud_basket_collision(b, st->cloud_t, st->cloud_psi_upper, GetScreenHeight()*CLOUD_UPPER_Y_PERCENTAGE)) {
-        if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with upper cloud\n", b->x, b->y, index);
-        st->score += POINTS_FOR_UPPER;
-        remove_ball(st, index);
-        return;
+  Ball* ball = st->balls;
+  while (ball) {
+    Basket* basket = st->baskets;
+    if (ball->vel_y > 0) {
+      while (basket) {
+        if (ball_basket_collision(ball, basket)) {
+          if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with lower cloud\n", ball->x, ball->y, index);
+          st->score += basket->points;
+          remove_ball(st, index);
+          return;
+        }
+        basket = basket->next;
       }
     }
 
-    b = b->next;
+    ball = ball->next;
     index += 1;
   }
 }
