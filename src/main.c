@@ -10,6 +10,9 @@
 #include "domain.c"
 
 f32 DeltaTime;
+i32 INITIAL_SCREEN_WIDTH  = 350;
+i32 INITIAL_SCREEN_HEIGHT = 700;
+
 
 void update(State* st) {
   // t = fract(t+DT*dt)
