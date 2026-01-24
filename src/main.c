@@ -88,29 +88,13 @@ State init(bool debug_mode) {
   st.textures.slingshot = slingshot;
   st.textures.ball      = ball;
 
-  Basket* cloud_lower = malloc(sizeof(Basket));
-  cloud_lower->kind = BK_Cloud;
-  cloud_lower->data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = 0.0, .y = CLOUD_LOWER_Y_PERCENTAGE*GetScreenHeight()} };
-  cloud_lower->apparent_width = CLOUD_WIDTH;
-  cloud_lower->apparent_height = CLOUD_HEIGHT;
-  cloud_lower->hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X;
-  cloud_lower->hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
-  cloud_lower->points = 1;
-  cloud_lower->texture = ball; // temporary
-  cloud_lower->next = NULL;
+  Texture2D cloud = LoadTexture("../assets/cloud.png");
 
-  Basket* cloud_higher = malloc(sizeof(Basket));
-  cloud_higher->kind = BK_Cloud;
-  cloud_higher->data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = 1.6, .y = CLOUD_UPPER_Y_PERCENTAGE*GetScreenHeight()} };
-  cloud_higher->apparent_width = CLOUD_WIDTH;
-  cloud_higher->apparent_height = CLOUD_HEIGHT;
-  cloud_higher->hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X;
-  cloud_higher->hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
-  cloud_higher->points = 2;
-  cloud_higher->texture = ball; // temporary
-  cloud_higher->next = cloud_lower;
+  Basket* cloud_lower = new_basket_cloud(&cloud, 0.0, CLOUD_LOWER_Y_PERCENTAGE*GetScreenHeight(), 1);
+  Basket* cloud_upper = new_basket_cloud(&cloud, 1.6, CLOUD_UPPER_Y_PERCENTAGE*GetScreenHeight(), 2);
+  cloud_upper->next = cloud_lower;
+  st.baskets = cloud_upper;
 
-  st.baskets = cloud_higher;
   return st;
 }
 

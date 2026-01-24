@@ -88,3 +88,18 @@ void update_basket_position(Basket* basket, f32 DeltaTime) {
     }
   }
 }
+
+
+Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, f32 points) {
+  Basket* basket = malloc(sizeof(Basket));
+  basket->kind = BK_Cloud;
+  basket->data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = psi, .y = y} };
+  basket->apparent_width = CLOUD_WIDTH;
+  basket->apparent_height = CLOUD_HEIGHT;
+  basket->hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X;
+  basket->hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
+  basket->points = points;
+  basket->texture = *texture; // temporary
+  basket->next = NULL;
+  return basket;
+}
