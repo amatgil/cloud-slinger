@@ -103,11 +103,14 @@ int main(i32 argc, char** argv) {
 
   while (!WindowShouldClose()) {
     DeltaTime = GetFrameTime();
+    if (!st.paused) update(&st);
+    if (IsKeyPressed(KEY_SPACE)) st.paused = !st.paused;
+
     BeginDrawing();
     ClearBackground(COLOR_BACKGROUND);
-    update(&st);
     render(&st);
     EndDrawing();
+
   }
 
   CloseWindow();

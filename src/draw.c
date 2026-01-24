@@ -19,16 +19,17 @@ void draw_ball(State* st, struct Ball* ball) {
   assert(st != NULL);
   assert(ball != NULL);
   Rectangle underlying = (Rectangle){
-      .x = ball->x - BALL_RADIUS,
-      .y = ball->y - BALL_RADIUS,
+      .x = ball->x,
+      .y = ball->y,
       .width  = BALL_RADIUS*2.0,
       .height = BALL_RADIUS*2.0,
   };
+  Texture2D* tex = &st->textures.ball;
   DrawTexturePro(
     st->textures.ball,
-    (Rectangle){ .x = 0.0, .y = 0.0, .width = st->textures.ball.width, .height = st->textures.ball.height},
+    (Rectangle){ .x = 0.0, .y = 0.0, .width = tex->width, .height = tex->height},
     underlying,
-    Vector2Zero(),
+    (Vector2){.x = BALL_RADIUS, .y = BALL_RADIUS },
     ball->angle * RAD2DEG,
     WHITE);
   if(st->debug_mode) DrawCircle(ball->x, ball->y, BALL_RADIUS, (Color){255, 0, 0, 100});
@@ -147,4 +148,7 @@ void draw_numeric_debug_info(State* st) {
 
   sprintf(buf, "Num balls: %d", count_balls(st));
   DrawText(buf, 5, 5+12*2, 12, WHITE);
+
+  sprintf(buf, "Paused: %d", st->paused);
+  DrawText(buf, 5, 5+12*3, 12, WHITE);
 }

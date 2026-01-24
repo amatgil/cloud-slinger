@@ -14,6 +14,7 @@ typedef struct {
 
 typedef struct {
   bool debug_mode;
+  bool paused;
   f32 cloud_t; // how far along movement, [0..1)
   f32 cloud_psi_lower;
   f32 cloud_psi_upper;
@@ -29,6 +30,7 @@ State new_state() {
   Textures textures = (Textures){};
   return (State){
     .debug_mode = false,
+    .paused = false,
     .cloud_t = 0.0,
     .cloud_psi_lower = 0.0,
     .cloud_psi_upper = TAU/4 + 0.1,
