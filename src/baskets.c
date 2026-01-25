@@ -1,12 +1,11 @@
 #pragma once
 
 #include "constants.c"
-#include "definitions.c"
 #include "raylib.h"
 #include "types.c"
 #include <math.h>
 #include <assert.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
   f32 t; f32 psi; // these two make up x
@@ -36,11 +35,13 @@ typedef struct Basket {
   f32 hitbox_height;
   u32 points; // How many points it gives
   Texture2D texture;
+  bool is_transitioning_away;
+  bool marked_for_despawn;
   struct Basket* next;
 } Basket;
 
 // x position
-i32 cloud_position_x(f32 t, f32 psi) {
+i32 cloud_position_x(f32 t, f32 psi, bool transitioning_away) {
   return (sin(t*TAU + psi) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
 }
 
@@ -62,7 +63,7 @@ Rectangle basket_hitbox(Basket* basket) {
       f32 padding_x = (basket->apparent_width - basket->hitbox_width)/2.0;
       f32 padding_y = (basket->apparent_height - basket->hitbox_height); // Flush against bottom
       Rectangle r =  (Rectangle) {
-        .x = cloud_position_x(c->t, c->psi) + padding_x,
+        .x = cloud_position_x(c->t, c->psi, basket->is_transitioning_away) + padding_x,
         .y = c->y + padding_y,
         .width  = basket->hitbox_width,
         .height = basket->hitbox_height,
@@ -100,6 +101,8 @@ Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, f32 points) {
   basket->apparent_height = CLOUD_HEIGHT;
   basket->hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X;
   basket->hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
+  basket->is_transitioning_away = false;
+  basket->marked_for_despawn = false;
   basket->points = points;
   basket->texture = *texture; // temporary
   basket->next = NULL;

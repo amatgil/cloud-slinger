@@ -1,7 +1,6 @@
 #pragma once
 
 #include <raylib.h>
-#include "types.c"
 
 #define TAU 6.28318530717958647692
 
