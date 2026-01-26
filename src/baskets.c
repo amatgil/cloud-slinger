@@ -45,10 +45,10 @@ i32 cloud_position_x(f32 t, f32 psi, bool transitioning_away) {
   return (sin(t*TAU + psi) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
 }
 
-Rectangle cloud_rectangle(f32 t, f32 psi, f32 height_percent) {
+Rectangle cloud_rectangle(f32 t, f32 psi, f32 height_percent, bool transitioning_away) {
   f32 h = (f32)GetScreenHeight();
   return (Rectangle) {
-    .x      = cloud_position_x(t, psi),
+    .x      = cloud_position_x(t, psi, transitioning_away),
     .y      = (i32)(h*height_percent),
     .width  =  CLOUD_WIDTH,
     .height =  CLOUD_HEIGHT };

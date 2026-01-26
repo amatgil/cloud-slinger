@@ -1,0 +1,9 @@
+* Cloud Slinger
+** Types of Baskets
+- Cloud: Always on screen, moving sinusoidally
+- Pelican: Moves horizontally, straight across, leaving the screen
+- Hot-Air Balloon: Moves diagonally, in the same manner as the pelican
+- Baby Bird: Flappy bird style, hops across the screen, bounces off of the edges of the screen N times, and on the N+1, leaves.
+
+** Obstacles
+- The Sun: Randomly shoots lasers randomly (in any direction, from [0-..tau/4]). Lasers delete balls.

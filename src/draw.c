@@ -21,7 +21,7 @@ void draw_basket(Basket* basket) {
         basket->texture,
         (Rectangle){ .x = 0.0, .y = 0.0, .width = tex->width, .height = tex->height},
         (Rectangle){
-          .x      = cloud_position_x(c->t, c->psi),
+          .x      = cloud_position_x(c->t, c->psi, basket->is_transitioning_away),
           .y      = c->y,
           .width  = basket->apparent_width,
           .height = basket->apparent_height},
