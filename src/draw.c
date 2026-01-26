@@ -21,7 +21,7 @@ void draw_basket(Basket* basket) {
         basket->texture,
         (Rectangle){ .x = 0.0, .y = 0.0, .width = tex->width, .height = tex->height},
         (Rectangle){
-          .x      = cloud_position_x(c->t, c->psi, basket->is_transitioning_away),
+          .x      = cloud_position_x(c->t, c->psi),
           .y      = c->y,
           .width  = basket->apparent_width,
           .height = basket->apparent_height},
@@ -29,7 +29,7 @@ void draw_basket(Basket* basket) {
       break;
     }
 
-    case BK_Bird: {
+    case BK_Pelican: {
       assert(false);
       break;
     }

@@ -18,7 +18,8 @@ typedef struct {
 
 typedef enum {
   BK_Cloud,
-  BK_Bird,
+  BK_Pelican,
+  BK_HotAirBalloon,
 } BasketKind;
 
 typedef union {
@@ -35,21 +36,21 @@ typedef struct Basket {
   f32 hitbox_height;
   u32 points; // How many points it gives
   Texture2D texture;
-  bool is_transitioning_away;
   bool marked_for_despawn;
   struct Basket* next;
 } Basket;
 
 // x position
-i32 cloud_position_x(f32 t, f32 psi, bool transitioning_away) {
-  return (sin(t*TAU + psi) + 1.0)/2.0 * (GetScreenWidth()-CLOUD_WIDTH);
+f32 cloud_position_x(f32 t, f32 psi) {
+  f64 angle = (f64)(t*TAU + psi);
+  return ((f32)sin(angle) + 1.0f)/2.0f * (f32)(GetScreenWidth()-CLOUD_WIDTH);
 }
 
-Rectangle cloud_rectangle(f32 t, f32 psi, f32 height_percent, bool transitioning_away) {
+Rectangle cloud_rectangle(f32 t, f32 psi, f32 height_percent) {
   f32 h = (f32)GetScreenHeight();
   return (Rectangle) {
-    .x      = cloud_position_x(t, psi, transitioning_away),
-    .y      = (i32)(h*height_percent),
+    .x      = cloud_position_x(t, psi),
+    .y      = h*height_percent,
     .width  =  CLOUD_WIDTH,
     .height =  CLOUD_HEIGHT };
 }
@@ -63,7 +64,7 @@ Rectangle basket_hitbox(Basket* basket) {
       f32 padding_x = (basket->apparent_width - basket->hitbox_width)/2.0;
       f32 padding_y = (basket->apparent_height - basket->hitbox_height); // Flush against bottom
       Rectangle r =  (Rectangle) {
-        .x = cloud_position_x(c->t, c->psi, basket->is_transitioning_away) + padding_x,
+        .x = cloud_position_x(c->t, c->psi) + padding_x,
         .y = c->y + padding_y,
         .width  = basket->hitbox_width,
         .height = basket->hitbox_height,
@@ -71,7 +72,7 @@ Rectangle basket_hitbox(Basket* basket) {
       return r;
     }
 
-    case BK_Bird: {
+    case BK_Pelican: {
       assert(false);
     }
   }
@@ -85,7 +86,7 @@ void update_basket_position(Basket* basket, f32 DeltaTime) {
       break;
     }
 
-    case BK_Bird: {
+    case BK_Pelican: {
       assert(false);
       break;
     }
@@ -93,18 +94,19 @@ void update_basket_position(Basket* basket, f32 DeltaTime) {
 }
 
 
-Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, f32 points) {
-  Basket* basket = malloc(sizeof(Basket));
-  basket->kind = BK_Cloud;
-  basket->data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = psi, .y = y} };
-  basket->apparent_width = CLOUD_WIDTH;
-  basket->apparent_height = CLOUD_HEIGHT;
-  basket->hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X;
-  basket->hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y;
-  basket->is_transitioning_away = false;
-  basket->marked_for_despawn = false;
-  basket->points = points;
-  basket->texture = *texture; // temporary
-  basket->next = NULL;
-  return basket;
+Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, u32 points) {
+  Basket basket = {
+    .kind = BK_Cloud,
+    .data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = psi, .y = y} },
+    .apparent_width = CLOUD_WIDTH,
+    .hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X,
+    .hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y,
+    .marked_for_despawn = false,
+    .points = points,
+    .texture = *texture, // temporary
+    .next = NULL,
+  };
+  Basket* ptr = malloc(sizeof(Basket));
+  *ptr = basket;
+  return ptr;
 }

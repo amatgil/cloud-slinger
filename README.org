@@ -7,3 +7,5 @@
 
 ** Obstacles
 - The Sun: Randomly shoots lasers randomly (in any direction, from [0-..tau/4]). Lasers delete balls.
+- Asteriods: Every so often, a huge asteroid starts falling from the sky. Shoot balls at it to make it shrink in size. If, when it lands, it's too big, you go boom-boom and dead-dead. It also breaks baskets in its path. If it's small enough, however, it cna score in said baskets.
+  A dinosaur will run around before the asteroid appears, as a warning. It will be in visible distress.
