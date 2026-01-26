@@ -1,5 +1,6 @@
--Wall
+-O1
 -std=c99
+-Wall
 -Wextra
 -Wfloat-equal
 -Wundef
@@ -13,12 +14,4 @@
 -Wswitch-enum
 -Wconversion
 -Wunreachable-code
--O1
 -Wmissing-field-initializers
--lraylib
--lGL
--lm
--lpthread
--ldl
--lrt
--lX11
