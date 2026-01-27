@@ -23,8 +23,8 @@ void summon_ball(State* st) {
   f32 power_factor = (f32)Vector2Distance(focus, SLINGSHOT_CENTER) / SLINGSHOT_MAX_RADIUS;
   f32 theta = Vector2LineAngle(focus, SLINGSHOT_CENTER) + TAU/2.0f;
 
-  f32 vel_x = (f32)-cos(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
-  f32 vel_y =  (f32)sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
+  f32 vel_x = -cosf(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
+  f32 vel_y =  sinf(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
 
   add_ball(st, focus.x, focus.y, vel_x, vel_y);
   st->slingshot_cooldown = BALL_COOLDOWN;

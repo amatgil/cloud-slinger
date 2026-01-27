@@ -46,7 +46,7 @@ typedef struct Basket {
 // x position
 f32 cloud_position_x(f32 t, f32 psi) {
   f32 angle = t*TAU + psi;
-  return ((f32)sin(angle) + 1.0f)/2.0f * (f32)(GetScreenWidth()-CLOUD_WIDTH);
+  return (sinf(angle) + 1.0f)/2.0f * (f32)(GetScreenWidth()-CLOUD_WIDTH);
 }
 
 Rectangle cloud_rectangle(f32 t, f32 psi, f32 height_percent) {

@@ -13,14 +13,13 @@ bool laser_is_live(State* st) {
 // Throws a laser if the cooldown allows
 void throw_laser(State* st) {
   assert(st != NULL);
+  if (laser_is_live(st)) return;
+
   f32* magnitude = &st->laser_magnitude;
   f32* angle = &st->laser_angle;
-  if (*magnitude < INFINITY) return; // Already a laser live
 
   *magnitude = 0.0;
-  // Subdivide the LASER_MAX_ANGLE-LASER_MIN_ANGLE radians
-  // into 2^16 discrete positions (angles grow counterclockwise)
-  u32 random = (u32)rand() % 65536;
+  f32 random = ((f32)rand()) / (f32)RAND_MAX;
   f32 range = LASER_MAX_ANGLE - LASER_MIN_ANGLE;
   *angle = (f32)random * range + LASER_MIN_ANGLE;
 }
@@ -54,12 +53,26 @@ void handle_laser_collisions(State* st) {
 }
 
 
+// Assumes we're in drawing mode
 void draw_laser(State* st) {
   assert(st != NULL);
-  // TODO
+  Vector2 center = Vector2Scale(
+    Vector2Rotate(
+      (Vector2){.x=0.0, .y=1.0},
+      -st->laser_angle),
+    st->laser_magnitude);
 
+  Rectangle r = (Rectangle) {
+    .x = center.x,
+    .y = center.y,
+    .width  = LASER_WIDTH,
+    .height = LASER_HEIGHT,
+  };
+  f32 angle = -(TAU/2.0f + TAU/4.0f + st->laser_angle);
+  DrawRectanglePro(r, Vector2Zero(), angle*RAD2DEG, COLOR_LASER);
 }
 
+// Assumes we're in drawing mode
 void draw_sun(State* st) {
   assert(st != NULL);
   Texture2D* tex = &st->textures.sun;
@@ -71,11 +84,18 @@ void draw_sun(State* st) {
 }
 
 // Assumes we're in drawing mode
-void draw_laser_range() {
-
+void draw_laser_range(void) {
+  Color c = (Color){255, 100, 0, 100};
+  f32 mag = (f32)MAX(GetScreenHeight(), GetScreenWidth());
+  Vector2 low = Vector2Rotate((Vector2){.x=0.0, .y=1.0}, -LASER_MIN_ANGLE);
+  Vector2 high = Vector2Rotate((Vector2){.x=0.0, .y=1.0}, -LASER_MAX_ANGLE);
+  DrawLineV(Vector2Zero(), Vector2Scale(low, mag), c);
+  DrawLineV(Vector2Zero(), Vector2Scale(high, mag), c);
 }
 
 // Assumes we're in drawing mode
-void draw_laser_path() {
-
+void draw_laser_path(State* st) {
+  Vector2 dir = Vector2Rotate((Vector2){.x=0.0, .y=1.0}, -st->laser_angle);
+  f32 mag = (f32)MAX(GetScreenHeight(), GetScreenWidth());
+  DrawLineV(Vector2Zero(),Vector2Scale(dir, mag), YELLOW);
 }

@@ -23,8 +23,10 @@
 #define LASER_VEL 30
 #define LASER_MIN_COOLDOWN 10
 #define LASER_MAX_COOLDOWN 30
-#define LASER_MIN_ANGLE 10
-#define LASER_MAX_ANGLE 10
+#define LASER_MIN_ANGLE 0.2f
+#define LASER_MAX_ANGLE 1.0f
+#define LASER_WIDTH 20
+#define LASER_HEIGHT 10
 #define SUN_RADIUS 70
 
 #define SLINGSHOT_WIDTH 160
@@ -48,6 +50,7 @@
 #define COLOR_SLINGSHOT_STRING (Color){ 205, 214, 244, 255 }
 #define COLOR_CLOUD            (Color){ 230, 255, 230, 255 }
 #define COLOR_SCORE            (Color){ 230, 255, 230, 255 }
+#define COLOR_LASER            (Color){ 255,   0, 0,   255 }
 
 #define POINTS_FOR_LOWER 1
 #define POINTS_FOR_UPPER 2

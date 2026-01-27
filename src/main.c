@@ -34,7 +34,10 @@ State init(bool debug_mode) {
       .ball            = LoadTexture("../assets/ball.png"),
       .cloud           = LoadTexture("../assets/cloud.png"),
       .pelican         = LoadTexture("../assets/default_purple.png"),
-    }
+    },
+    .laser_angle = 0.0,
+    .laser_magnitude = INFINITY,
+    .laser_cooldown = LASER_MAX_COOLDOWN,
   };
 
   Basket* cloud_upper = new_basket_cloud(&st.textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
@@ -107,8 +110,10 @@ void render(State* st) {
 
   if (st->debug_mode) {
      draw_slingshot_radius();
-     draw_numeric_state_info(st);
      draw_mouse_circle();
+     draw_laser_range();
+     draw_laser_path(st);
+     draw_numeric_state_info(st);
   }
 }
 
