@@ -6,33 +6,6 @@
 #include <assert.h>
 #include <math.h>
 
-// Returns in order: Top left, top right, bottom left, bottom right
-void rotate_rect(Rectangle input, f32 rotation, Vector2 ret[4]) {
-  float s = sinf(rotation*DEG2RAD);
-  float c = cosf(rotation*DEG2RAD);
-  float x = input.x;
-  float y = input.y;
-  float w = input.width;
-  float h = input.height;
-
-  // Top left
-  ret[0].x = x;
-  ret[0].y = y;
-
-  // Top right
-  ret[1].x = x + w*c;
-  ret[1].y = y + w*s;
-
-  // Bottom left
-  ret[2].x = x - h*s;
-  ret[2].y = y + h*c;
-
-  // Bottom right
-  ret[3].x = x + w*c - h*s;
-  ret[3].y = y + w*s + h*c;
-}
-
-
 bool laser_is_live(State* st) {
   return st->laser_magnitude < INFINITY;
 }
@@ -86,28 +59,13 @@ Vector2 get_laser_center(State *st) {
     st->laser_magnitude);
 }
 
-Rectangle get_laser_base_rect(State *st) {
-  Vector2 center = get_laser_center(st);
-  return (Rectangle) {
-    .x = center.x + LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
-    .y = center.y - LASER_HEIGHT*sinf(st->laser_angle)/2.0f,
-    .width  = LASER_WIDTH,
-    .height = LASER_HEIGHT,
-  };
-}
-
-// Returns in order: Top left, top right, bottom left, bottom right
-void get_laser_rect(State* st, Vector2 ret[4]) {
-  rotate_rect(get_laser_base_rect(st), -st->laser_angle, ret);
-}
-
 // Making a proper rotated-rectangle collision impl was
 // too hard, so we're simulating the laser as a circle (radius
 // is the height for a bit of leniancy)
 bool laser_ball_collision(State* st, Ball* ball) {
   assert(st != NULL);
   assert(ball != NULL);
-  f32 d = Vector2Distance(get_laser_center(st), (Vector2){.x=ball->x, .y=ball->y});
+  f32 d = Vector2Distance(get_laser_center(st), (Vector2){ .x=ball->x, .y=ball->y });
   return d <= (LASER_HEIGHT+BALL_RADIUS);
 }
 
@@ -120,7 +78,7 @@ void handle_laser_collisions(State* st) {
       remove_ball(st, index);
       return;
     }
-    
+
     index += 1;
     b = b->next;
   }
@@ -133,7 +91,15 @@ void draw_laser(State* st) {
   if (!laser_is_live(st)) return;
 
   f32 angle = -(TAU/2.0f + TAU/4.0f + st->laser_angle);
-  DrawRectanglePro(get_laser_base_rect(st), Vector2Zero(), angle*RAD2DEG, COLOR_LASER);
+
+  Vector2 center = get_laser_center(st);
+  Rectangle pre_hitbox = (Rectangle) {
+    .x = center.x + LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
+    .y = center.y - LASER_HEIGHT*sinf(st->laser_angle)/2.0f,
+    .width  = LASER_WIDTH,
+    .height = LASER_HEIGHT,
+  };
+  DrawRectanglePro(pre_hitbox, Vector2Zero(), angle*RAD2DEG, COLOR_LASER);
 }
 
 // Assumes we're in drawing mode
