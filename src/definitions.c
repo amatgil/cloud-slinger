@@ -29,8 +29,8 @@ typedef struct {
   bool debug_mode;
   bool paused;
   Ball* balls;
-  bool clicking_last_frame; // were we clicking, last frame?
-  f32 slingshot_cooldown; // how long til you can shoot again
+  bool clicking_last_frame;
+  f32 slingshot_cooldown;
   u32 score;
   f32 laser_angle, laser_magnitude, laser_cooldown; // Magnitude is NaN when no laser
   Textures textures;
