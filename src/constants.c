@@ -29,6 +29,7 @@
 #define LASER_WIDTH 20
 #define LASER_HEIGHT 10
 #define LASER_WARNING 1
+#define LASER_ORIGIN (Vector2){.x=30.0f, .y=47.0f}
 #define SUN_RADIUS 70
 
 #define SLINGSHOT_WIDTH 160

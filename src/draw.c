@@ -137,27 +137,27 @@ void draw_basket_hitbox(Basket* basket) {
 // Assumes we're in drawing mode
 void draw_numeric_state_info(State* st) {
   char buf[256];
-  DrawRectangle(0, 0, 100, 5+12*7, (Color){0, 0, 0, 130});
+  DrawRectangle(0, GetScreenHeight()-(5+12*7), 100, 5+12*7, (Color){0, 0, 0, 130});
 
   sprintf(buf, "Cooldown: %.2f", st->slingshot_cooldown);
-  DrawText(buf, 5, 5+12*0, 12, WHITE);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*1), 12, WHITE);
 
   sprintf(buf, "Num baskets: %d", count_baskets(st));
-  DrawText(buf, 5, 5+12*1, 12, WHITE);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*2), 12, WHITE);
 
   sprintf(buf, "Num balls: %d", count_balls(st));
-  DrawText(buf, 5, 5+12*2, 12, WHITE);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*3), 12, WHITE);
 
   sprintf(buf, "Paused: %d", st->paused);
-  DrawText(buf, 5, 5+12*3, 12, WHITE);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*4), 12, WHITE);
 
   sprintf(buf, "Laser magn: %.2f", st->laser_magnitude);
-  DrawText(buf, 5, 5+12*4, 12, WHITE);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*5), 12, WHITE);
 
   sprintf(buf, "Laser angl: %.2f", st->laser_angle);
-  DrawText(buf, 5, 5+12*5, 12, WHITE);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*6), 12, WHITE);
 
   sprintf(buf, "Laser time: %.2f", st->laser_cooldown);
-  DrawText(buf, 5, 5+12*6, 12, WHITE);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*7), 12, WHITE);
 
 }

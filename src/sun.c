@@ -52,11 +52,12 @@ void advance_laser(State* st, f32 DeltaTime) {
 }
 
 Vector2 get_laser_center(State *st) {
-  return Vector2Scale(
-    Vector2Rotate(
-      (Vector2){.x=0.0, .y=1.0},
-      -st->laser_angle),
-    st->laser_magnitude);
+  return Vector2Add(LASER_ORIGIN,
+    Vector2Scale(
+      Vector2Rotate(
+        (Vector2){.x=0.0, .y=1.0},
+        -st->laser_angle),
+      st->laser_magnitude));
 }
 
 // Making a proper rotated-rectangle collision impl was
@@ -125,8 +126,9 @@ void draw_laser_range(void) {
   f32 mag = (f32)MAX(GetScreenHeight(), GetScreenWidth());
   Vector2 low = Vector2Rotate((Vector2){.x=0.0, .y=1.0}, -LASER_MIN_ANGLE);
   Vector2 high = Vector2Rotate((Vector2){.x=0.0, .y=1.0}, -LASER_MAX_ANGLE);
-  DrawLineV(Vector2Zero(), Vector2Scale(low, mag), c);
-  DrawLineV(Vector2Zero(), Vector2Scale(high, mag), c);
+  DrawLineV(LASER_ORIGIN, Vector2Scale(low, mag), c);
+  DrawLineV(LASER_ORIGIN, Vector2Scale(high, mag), c);
+  DrawCircleV(LASER_ORIGIN, 10, (Color){255, 0, 0, 100});
 }
 
 // Assumes we're in drawing mode
@@ -134,5 +136,5 @@ void draw_laser_path(State* st) {
   if (!laser_is_live(st)) return;
   Vector2 dir = Vector2Rotate((Vector2){.x=0.0, .y=1.0}, -st->laser_angle);
   f32 mag = (f32)MAX(GetScreenHeight(), GetScreenWidth());
-  DrawLineV(Vector2Zero(),Vector2Scale(dir, mag), YELLOW);
+  DrawLineV(LASER_ORIGIN,Vector2Scale(dir, mag), YELLOW);
 }
