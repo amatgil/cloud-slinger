@@ -92,9 +92,9 @@ void update(State* st) {
 // Assumes we're in drawing mode
 void render(State* st) {
   draw_laser(st);
-  draw_ready_ball(st);
   draw_score(st);
-  draw_slingshot_strings(); draw_slingshot(st);
+  draw_slingshot(st); draw_slingshot_strings();
+  draw_ready_ball(st);
   draw_sun(st);
 
   Ball* ball = st->balls;
@@ -111,11 +111,12 @@ void render(State* st) {
   }
 
   if (st->debug_mode) {
-     draw_slingshot_radius();
-     draw_mouse_circle();
-     draw_laser_range();
-     draw_laser_path(st);
-     draw_numeric_state_info(st);
+    draw_laser_hitbox(st);
+    draw_slingshot_radius();
+    draw_mouse_circle();
+    draw_laser_range();
+    draw_laser_path(st);
+    draw_numeric_state_info(st);
   }
 }
 
