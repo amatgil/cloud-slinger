@@ -1,4 +1,5 @@
 
+#include "constants.c"
 #include "definitions.c"
 #include "raylib.h"
 #include <math.h>
@@ -16,10 +17,10 @@ void throw_laser(State* st) {
 
   *magnitude = 0.0;
   // Subdivide the LASER_MAX_ANGLE-LASER_MIN_ANGLE radians
-  // into 2^32 discrete positions (angles grow counterclockwise)
-  u32 random = rand();
-  *angle = rand();
-  // TODO the actual thing
+  // into 2^16 discrete positions (angles grow counterclockwise)
+  u32 random = (u32)rand() % 65536;
+  f32 range = LASER_MAX_ANGLE - LASER_MIN_ANGLE;
+  *angle = (f32)random * range + LASER_MIN_ANGLE;
 }
 
 // Reduces cooldown and/or moves laser forward
@@ -54,5 +55,15 @@ void handle_laser_collisions(State* st) {
 void draw_laser(State* st) {
   assert(st != NULL);
   // TODO
+
+}
+
+// Assumes we're in drawing mode
+void draw_laser_range() {
+
+}
+
+// Assumes we're in drawing mode
+void draw_laser_path() {
 
 }

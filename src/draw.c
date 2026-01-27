@@ -9,48 +9,9 @@
 #include "domain.c"
 #include "definitions.c"
 
-void draw_basket(Basket* basket) {
-  assert(basket != NULL);
-
-  switch (basket->kind) {
-    case BK_Cloud: {
-      BasketCloud* c = (BasketCloud*)&basket->data;
-      Texture2D* tex = basket->texture;
-      DrawTexturePro(
-        *basket->texture,
-        (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
-        (Rectangle){
-          .x      = cloud_position_x(c->t, c->psi),
-          .y      = c->y,
-          .width  = basket->apparent_width,
-          .height = basket->apparent_height},
-        Vector2Zero(), 0.0, WHITE);
-      break;
-    }
-
-    case BK_Pelican: {
-      BasketPelican* b = (BasketPelican*)&basket->data;
-      Texture2D* tex = basket->texture;
-      DrawTexturePro(
-        *basket->texture,
-        (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
-        (Rectangle){
-          .x      = b->x,
-          .y      = b->y,
-          .width  = basket->apparent_width,
-          .height = basket->apparent_height},
-        Vector2Zero(), 0.0, WHITE);
-      break;
-    }
-
-    case BK_HotAirBalloon: {
-      assert(false);
-      break;
-    }
-  }
-}
 
 
+// Assumes we're in drawing mode
 void draw_ball(State* st, Ball* ball) {
   assert(st != NULL);
   assert(ball != NULL);
@@ -71,6 +32,7 @@ void draw_ball(State* st, Ball* ball) {
   if(st->debug_mode) DrawCircle((i32)ball->x, (i32)ball->y, BALL_RADIUS, (Color){255, 0, 0, 100});
 }
 
+// Assumes we're in drawing mode
 void draw_slingshot(State* st) {
   assert(st != NULL);
   f32 x = ((f32)GetScreenWidth()/2.0f - (f32)SLINGSHOT_WIDTH/2.0f);
@@ -89,10 +51,12 @@ void draw_slingshot(State* st) {
 }
 
 // Inputs are at the center of the ends
+// Assumes we're in drawing mode
 void draw_slingshot_string(Vector2 a, Vector2 b) {
   DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, COLOR_SLINGSHOT_STRING);
 }
 
+// Assumes we're in drawing mode
 void draw_slingshot_strings(void) {
   f32 x = SLINGSHOT_CENTER.x;
   f32 y = SLINGSHOT_CENTER.y;
@@ -112,11 +76,11 @@ void draw_slingshot_strings(void) {
   Vector2 target = get_slingshot_focus();
   draw_slingshot_string(anchor_left, target);
   draw_slingshot_string(anchor_right, target);
-
 }
 
 // Draws ball in slingshot focus when cooldown permits, does nothing otherwise
 // Balls don't actually exist until they're thrown!
+// Assumes we're in drawing mode
 void draw_ready_ball(State* st) {
   assert(st != NULL);
   if (st->slingshot_cooldown > 0) return;
@@ -142,24 +106,27 @@ void draw_ready_ball(State* st) {
   draw_ball(st, &b);
 }
 
+// Assumes we're in drawing mode
 void draw_score(State* st) {
   assert(st != NULL);
   char buf[256];
   sprintf(buf, "%d", st->score);
   i32 width = MeasureText(buf, SCORE_FONTSIZE);
   DrawText(buf, GetScreenWidth()/2 - width/2, SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
-
 }
 
+// Assumes we're in drawing mode
 void draw_mouse_circle(void) {
   Vector2 pos = GetMousePosition();
   DrawCircle((i32)pos.x, (i32)pos.y, 5, (Color){255, 255, 255, 80});
 }
 
+// Assumes we're in drawing mode
 void draw_slingshot_radius(void) {
   DrawCircleLines((i32)SLINGSHOT_CENTER.x, (i32)SLINGSHOT_CENTER.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
 }
 
+// Assumes we're in drawing mode
 void draw_basket_hitbox(Basket* basket) {
   assert(basket != NULL);
 
@@ -167,6 +134,7 @@ void draw_basket_hitbox(Basket* basket) {
   DrawRectangleLinesEx(hitbox, 2, MAGENTA);
 }
 
+// Assumes we're in drawing mode
 void draw_numeric_state_info(State* st) {
   char buf[256];
 

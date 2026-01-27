@@ -1,7 +1,8 @@
 #pragma once
 
-#include "constants.c"
 #include "raylib.h"
+#include "constants.c"
+#include "raymath.h"
 #include "types.c"
 #include <math.h>
 #include <assert.h>
@@ -146,4 +147,46 @@ Basket* new_basket_pelican(Texture2D* texture, bool going_left, f32 y, u32 point
   Basket* ptr = malloc(sizeof(Basket));
   *ptr = basket;
   return ptr;
+}
+
+// Assumes we're in drawing mode
+void draw_basket(Basket* basket) {
+  assert(basket != NULL);
+
+  switch (basket->kind) {
+    case BK_Cloud: {
+      BasketCloud* c = (BasketCloud*)&basket->data;
+      Texture2D* tex = basket->texture;
+      DrawTexturePro(
+        *basket->texture,
+        (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
+        (Rectangle){
+          .x      = cloud_position_x(c->t, c->psi),
+          .y      = c->y,
+          .width  = basket->apparent_width,
+          .height = basket->apparent_height},
+        Vector2Zero(), 0.0, WHITE);
+      break;
+    }
+
+    case BK_Pelican: {
+      BasketPelican* b = (BasketPelican*)&basket->data;
+      Texture2D* tex = basket->texture;
+      DrawTexturePro(
+        *basket->texture,
+        (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
+        (Rectangle){
+          .x      = b->x,
+          .y      = b->y,
+          .width  = basket->apparent_width,
+          .height = basket->apparent_height},
+        Vector2Zero(), 0.0, WHITE);
+      break;
+    }
+
+    case BK_HotAirBalloon: {
+      assert(false);
+      break;
+    }
+  }
 }
