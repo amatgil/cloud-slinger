@@ -31,7 +31,7 @@ void update(State* st) {
     update_basket_position(basket, DeltaTime);
     basket = basket->next;
   }
-  clear_errant_balls(st);
+  clear_errant_baskets(st);
 
   if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->cooldown_left <= 0) summon_ball(st);
   st->cooldown_left -= DeltaTime;

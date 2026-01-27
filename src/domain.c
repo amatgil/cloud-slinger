@@ -104,6 +104,7 @@ void clear_errant_baskets(State* st) {
         BasketPelican* p = (BasketPelican*)&b->data;
         x = p->x;
         y = p->y;
+        break;
       }
       case BK_HotAirBalloon: {
         assert(false);
