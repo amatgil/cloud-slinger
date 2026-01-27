@@ -7,6 +7,7 @@
 #include "definitions.c"
 #include "draw.c"
 #include "constants.c"
+#include "sun.c"
 #include "domain.c"
 
 f32 DeltaTime;
@@ -24,7 +25,7 @@ State init(bool debug_mode) {
     .baskets = NULL,
     .balls = NULL,
     .clicking_last_frame = false,
-    .cooldown_left = 0.0,
+    .slingshot_cooldown = 0.0,
     .score = 0,
     .textures = {
       .default_purple  = LoadTexture("../assets/default_purple.png"),
@@ -36,8 +37,8 @@ State init(bool debug_mode) {
   };
 
   Basket* cloud_upper = new_basket_cloud(&st.textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
-  Basket* lower = new_basket_cloud(&st.textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
-  //Basket* lower = new_basket_pelican(&st.textures.pelican, true, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 4);
+  //Basket* lower = new_basket_cloud(&st.textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
+  Basket* lower = new_basket_pelican(&st.textures.pelican, true, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 4);
   cloud_upper->next = lower;
   st.baskets = cloud_upper;
 
@@ -63,11 +64,17 @@ void update(State* st) {
   }
   clear_errant_baskets(st);
 
-  if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->cooldown_left <= 0) summon_ball(st);
-  st->cooldown_left -= DeltaTime;
-  st->cooldown_left = MAX(st->cooldown_left, 0);
-
   handle_ball_baskets_collisions(st);
+
+  throw_laser(st);
+  advance_laser(st, DeltaTime);
+  handle_laser_collision(st);
+
+
+  if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->slingshot_cooldown <= 0) summon_ball(st);
+  st->slingshot_cooldown -= DeltaTime;
+  st->slingshot_cooldown = MAX(st->slingshot_cooldown, 0);
+
 
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }

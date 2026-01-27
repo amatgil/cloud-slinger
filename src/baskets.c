@@ -101,7 +101,7 @@ void update_basket_position(Basket* basket, f32 DeltaTime) {
     case BK_Pelican: {
       BasketPelican* b = (BasketPelican*)&basket->data;
       if (b->going_left) b->x -= PELICAN_VEL_X*DeltaTime;
-      else               b->x += PELICAN_VEL_X+DeltaTime;
+      else               b->x += PELICAN_VEL_X*DeltaTime;
       break;
     }
 
@@ -130,8 +130,8 @@ Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, u32 points) {
 }
 
 Basket* new_basket_pelican(Texture2D* texture, bool going_left, f32 y, u32 points) {
-  f32 x = 0;
-  if (going_left) x = (f32)GetScreenWidth();
+  f32 x = going_left ? (f32)GetScreenWidth() : 0.0f ;
+
   Basket basket = (Basket){
     .kind = BK_Pelican,
     .data = (BasketData) { .pelican = (BasketPelican){.x = x, .y = y, .going_left = going_left} },
@@ -146,5 +146,4 @@ Basket* new_basket_pelican(Texture2D* texture, bool going_left, f32 y, u32 point
   Basket* ptr = malloc(sizeof(Basket));
   *ptr = basket;
   return ptr;
-
 }

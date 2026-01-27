@@ -119,7 +119,7 @@ void draw_slingshot_strings(void) {
 // Balls don't actually exist until they're thrown!
 void draw_ready_ball(State* st) {
   assert(st != NULL);
-  if (st->cooldown_left > 0) return;
+  if (st->slingshot_cooldown > 0) return;
 
 
   // If the mouse is clicked, use slingshot focus
@@ -170,7 +170,7 @@ void draw_basket_hitbox(Basket* basket) {
 void draw_numeric_state_info(State* st) {
   char buf[256];
 
-  sprintf(buf, "Cooldown: %.3f", st->cooldown_left);
+  sprintf(buf, "Cooldown: %.3f", st->slingshot_cooldown);
   DrawText(buf, 5, 5+12*0, 12, WHITE);
 
   sprintf(buf, "Num baskets: %d", count_baskets(st));

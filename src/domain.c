@@ -27,7 +27,7 @@ void summon_ball(State* st) {
   f32 vel_y =  (f32)sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
 
   add_ball(st, focus.x, focus.y, vel_x, vel_y);
-  st->cooldown_left = BALL_COOLDOWN;
+  st->slingshot_cooldown = BALL_COOLDOWN;
 }
 
 // Is there a collision between the cloud defined by (t, psi, y) and ball?
