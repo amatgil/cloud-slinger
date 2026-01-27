@@ -61,7 +61,7 @@ Rectangle basket_hitbox(Basket* basket) {
   switch (basket->kind) {
     case BK_Cloud: {
       BasketCloud* c = (BasketCloud*)&basket->data;
-      f32 padding_x = (basket->apparent_width - basket->hitbox_width)/2.0;
+      f32 padding_x = (basket->apparent_width - basket->hitbox_width)/2.0f;
       f32 padding_y = (basket->apparent_height - basket->hitbox_height); // Flush against bottom
       Rectangle r =  (Rectangle) {
         .x = cloud_position_x(c->t, c->psi) + padding_x,
@@ -73,6 +73,9 @@ Rectangle basket_hitbox(Basket* basket) {
     }
 
     case BK_Pelican: {
+      assert(false);
+    }
+    case BK_HotAirBalloon: {
       assert(false);
     }
   }
@@ -89,6 +92,10 @@ void update_basket_position(Basket* basket, f32 DeltaTime) {
     case BK_Pelican: {
       assert(false);
       break;
+    }
+
+    case BK_HotAirBalloon: {
+      assert(false);
     }
   }
 }

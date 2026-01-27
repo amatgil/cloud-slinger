@@ -61,9 +61,9 @@ void render(State* st) {
   }
 
   if (st->debug_mode) {
-     draw_mouse_circle();
      draw_slingshot_radius();
-     draw_numeric_debug_info(st);
+     draw_numeric_state_info(st);
+     draw_mouse_circle();
   }
 }
 

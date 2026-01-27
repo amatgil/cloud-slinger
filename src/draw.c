@@ -19,7 +19,7 @@ void draw_basket(Basket* basket) {
       Texture2D* tex = &basket->texture;
       DrawTexturePro(
         basket->texture,
-        (Rectangle){ .x = 0.0, .y = 0.0, .width = tex->width, .height = tex->height},
+        (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
         (Rectangle){
           .x      = cloud_position_x(c->t, c->psi),
           .y      = c->y,
@@ -30,6 +30,11 @@ void draw_basket(Basket* basket) {
     }
 
     case BK_Pelican: {
+      assert(false);
+      break;
+    }
+
+    case BK_HotAirBalloon: {
       assert(false);
       break;
     }
@@ -49,27 +54,27 @@ void draw_ball(State* st, Ball* ball) {
   Texture2D* tex = &st->textures.ball;
   DrawTexturePro(
     st->textures.ball,
-    (Rectangle){ .x = 0.0, .y = 0.0, .width = tex->width, .height = tex->height},
+    (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
     underlying,
     (Vector2){.x = BALL_RADIUS, .y = BALL_RADIUS },
     ball->angle * RAD2DEG,
     WHITE);
-  if(st->debug_mode) DrawCircle(ball->x, ball->y, BALL_RADIUS, (Color){255, 0, 0, 100});
+  if(st->debug_mode) DrawCircle((i32)ball->x, (i32)ball->y, BALL_RADIUS, (Color){255, 0, 0, 100});
 }
 
 void draw_slingshot(State* st) {
   assert(st != NULL);
-  i32 x = (i32)((f32)GetScreenWidth()/2.0f - (f32)SLINGSHOT_WIDTH/2.0);
+  f32 x = ((f32)GetScreenWidth()/2.0f - (f32)SLINGSHOT_WIDTH/2.0f);
   Rectangle underlying = (Rectangle){
     .x      = x,
-    .y      = GetScreenHeight()-SLINGSHOT_HEIGHT,
+    .y      = (f32)GetScreenHeight()-SLINGSHOT_HEIGHT,
     .width  = SLINGSHOT_WIDTH,
     .height = SLINGSHOT_HEIGHT,
   };
 
   DrawTexturePro(
     st->textures.slingshot,
-    (Rectangle){.x = 0.0, .y = 0.0, .width = st->textures.slingshot.width, .height = st->textures.slingshot.height},
+    (Rectangle){.x = 0.0, .y = 0.0, .width = (f32)st->textures.slingshot.width, .height = (f32)st->textures.slingshot.height},
     underlying,
     Vector2Zero(), 0.0, WHITE);
 }
@@ -79,7 +84,7 @@ void draw_slingshot_string(Vector2 a, Vector2 b) {
   DrawLineEx(a, b, SLINGSHOT_STRING_THICKNESS, COLOR_SLINGSHOT_STRING);
 }
 
-void draw_slingshot_strings() {
+void draw_slingshot_strings(void) {
   f32 x = SLINGSHOT_CENTER.x;
   f32 y = SLINGSHOT_CENTER.y;
   f32 dx = SLINGSHOT_WIDTH  * SLINGSHOT_STRING_SEPARATION_X;
@@ -87,7 +92,7 @@ void draw_slingshot_strings() {
 
   Vector2 anchor_left  = (Vector2){ .x = x - dx, .y = y + dy };
   Vector2 anchor_right = (Vector2){ .x = x + dx, .y = y + dy };
-  Vector2 anchor_unheld = (Vector2){ .x = x, .y = y+SLINGSHOT_MAX_RADIUS/2.0 };
+  Vector2 anchor_unheld = (Vector2){ .x = x, .y = y+(f32)SLINGSHOT_MAX_RADIUS/2 };
 
   if (!IsMouseButtonDown(0)) {
     draw_slingshot_string(anchor_left, anchor_unheld);
@@ -119,8 +124,8 @@ void draw_ready_ball(State* st) {
     .next  = NULL
   };
   if (!IsMouseButtonDown(0)) {
-    b.x = SLINGSHOT_CENTER.x;
-    b.y = SLINGSHOT_CENTER.y + SLINGSHOT_MAX_RADIUS/2.0;
+    b.x = (f32)SLINGSHOT_CENTER.x;
+    b.y = SLINGSHOT_CENTER.y + SLINGSHOT_MAX_RADIUS/2.0f;
   };
 
   // Passing a pointer to the stack, but the function doesn't keep it around, so it's fine
@@ -133,17 +138,17 @@ void draw_score(State* st) {
   char buf[256];
   sprintf(buf, "%d", st->score);
   i32 width = MeasureText(buf, SCORE_FONTSIZE);
-  DrawText(buf, GetScreenWidth()/2.0 - width/2.0, SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
+  DrawText(buf, GetScreenWidth()/2 - width/2, SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
 
 }
 
-void draw_mouse_circle() {
+void draw_mouse_circle(void) {
   Vector2 pos = GetMousePosition();
-  DrawCircle(pos.x, pos.y, 5, (Color){255, 255, 255, 80});
+  DrawCircle((i32)pos.x, (i32)pos.y, 5, (Color){255, 255, 255, 80});
 }
 
-void draw_slingshot_radius() {
-  DrawCircleLines(SLINGSHOT_CENTER.x, SLINGSHOT_CENTER.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
+void draw_slingshot_radius(void) {
+  DrawCircleLines((i32)SLINGSHOT_CENTER.x, (i32)SLINGSHOT_CENTER.y, SLINGSHOT_MAX_RADIUS, (Color){255, 0, 0, 80});
 }
 
 void draw_basket_hitbox(Basket* basket) {
@@ -153,7 +158,7 @@ void draw_basket_hitbox(Basket* basket) {
   DrawRectangleLinesEx(hitbox, 2, MAGENTA);
 }
 
-void draw_numeric_debug_info(State* st) {
+void draw_numeric_state_info(State* st) {
   char buf[256];
 
   sprintf(buf, "Cooldown: %.3f", st->cooldown_left);
