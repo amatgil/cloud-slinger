@@ -37,7 +37,7 @@ State init(bool debug_mode) {
     },
     .laser_angle = 0.0,
     .laser_magnitude = INFINITY,
-    .laser_cooldown = LASER_MAX_COOLDOWN,
+    .laser_cooldown = LASER_STARTING_COOLDOWN,
   };
 
   Basket* cloud_upper = new_basket_cloud(&st.textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);

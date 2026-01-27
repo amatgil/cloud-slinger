@@ -22,9 +22,10 @@ void throw_laser(State* st) {
 
   f32* magnitude = &st->laser_magnitude;
   f32* angle = &st->laser_angle;
+  f32* cool = &st->laser_cooldown;
 
   *magnitude = 0.0;
-  st->laser_cooldown = 0.0;
+  *cool = 0.0;
 
   f32 random = ((f32)rand()) / (f32)RAND_MAX;
   f32 range = LASER_MAX_ANGLE - LASER_MIN_ANGLE;
@@ -44,7 +45,7 @@ void advance_laser(State* st, f32 DeltaTime) {
   if (laser_is_live(st)) *magnitude += LASER_VEL*DeltaTime;
   else st->laser_cooldown -= DeltaTime;
 
-  if (*magnitude > (f32)MAX(GetScreenWidth(), GetScreenHeight())) {
+  if (laser_is_live(st) && *magnitude > (f32)MAX(GetScreenWidth(), GetScreenHeight())) {
     *magnitude = INFINITY;
     start_new_cooldown(st);
   }
@@ -66,6 +67,8 @@ void handle_laser_collisions(State* st) {
 // Assumes we're in drawing mode
 void draw_laser(State* st) {
   assert(st != NULL);
+  if (!laser_is_live(st)) return;
+
   Vector2 center = Vector2Scale(
     Vector2Rotate(
       (Vector2){.x=0.0, .y=1.0},
@@ -105,6 +108,7 @@ void draw_laser_range(void) {
 
 // Assumes we're in drawing mode
 void draw_laser_path(State* st) {
+  if (!laser_is_live(st)) return;
   Vector2 dir = Vector2Rotate((Vector2){.x=0.0, .y=1.0}, -st->laser_angle);
   f32 mag = (f32)MAX(GetScreenHeight(), GetScreenWidth());
   DrawLineV(Vector2Zero(),Vector2Scale(dir, mag), YELLOW);
