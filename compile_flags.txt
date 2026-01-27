@@ -5,6 +5,7 @@
 -Wfloat-equal
 -Wundef
 -Wshadow
+-Wconditional-uninitialized
 -Wpointer-arith
 -Wcast-align
 -Wstrict-prototypes

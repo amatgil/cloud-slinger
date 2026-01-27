@@ -102,7 +102,7 @@ void update_basket_position(Basket* basket, f32 DeltaTime) {
 
 
 Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, u32 points) {
-  Basket basket = {
+  Basket basket = (Basket){
     .kind = BK_Cloud,
     .data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = psi, .y = y} },
     .apparent_width = CLOUD_WIDTH,
