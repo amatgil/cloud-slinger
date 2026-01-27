@@ -80,10 +80,11 @@ State init(bool debug_mode) {
   st.textures.slingshot = slingshot;
   st.textures.ball      = ball;
 
-  Texture2D cloud = LoadTexture("../assets/cloud.png");
+  Texture2D* cloud = malloc(sizeof(Texture2D));
+  *cloud = LoadTexture("../assets/cloud.png");
 
-  Basket* cloud_lower = new_basket_cloud(&cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
-  Basket* cloud_upper = new_basket_cloud(&cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
+  Basket* cloud_lower = new_basket_cloud(cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
+  Basket* cloud_upper = new_basket_cloud(cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
   cloud_upper->next = cloud_lower;
   st.baskets = cloud_upper;
 

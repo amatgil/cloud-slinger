@@ -13,8 +13,9 @@ typedef struct {
 } BasketCloud;
 
 typedef struct {
-  f32 t;
-} BasketBird;
+  f32 x;
+  f32 y;
+} BasketPelican;
 
 typedef enum {
   BK_Cloud,
@@ -25,7 +26,7 @@ typedef enum {
 // I wanna go back to rust :(
 typedef union {
   BasketCloud cloud;
-  BasketBird  bird;
+  BasketPelican pelican;
 } BasketData;
 typedef struct Basket {
   BasketKind kind;
@@ -35,7 +36,7 @@ typedef struct Basket {
   f32 hitbox_width;
   f32 hitbox_height;
   u32 points; // How many points it gives
-  Texture2D texture;
+  Texture2D* texture;
   bool marked_for_despawn;
   struct Basket* next;
 } Basket;
@@ -111,10 +112,29 @@ Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, u32 points) {
     .hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y,
     .marked_for_despawn = false,
     .points = points,
-    .texture = *texture, // temporary
+    .texture = texture, // temporary
     .next = NULL,
   };
   Basket* ptr = malloc(sizeof(Basket));
   *ptr = basket;
   return ptr;
+}
+
+Basket* new_basket_pelican(Texture2D* texture, f32 x, f32 y, u32 points) {
+  Basket basket = (Basket){
+    .kind = BK_Pelican,
+    .data = (BasketData) { .pelican = (BasketPelican){.x = x, .y = y} },
+    .apparent_width = PELICAN_WIDTH,
+    .apparent_height = PELICAN_HEIGHT,
+    .hitbox_width = PELICAN_WIDTH*CLOUD_BASKET_PERCENTAGE_X,
+    .hitbox_height = PELICAN_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y,
+    .marked_for_despawn = false,
+    .points = points,
+    .texture = texture, // temporary
+    .next = NULL,
+  };
+  Basket* ptr = malloc(sizeof(Basket));
+  *ptr = basket;
+  return ptr;
+
 }

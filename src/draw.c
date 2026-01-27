@@ -15,9 +15,9 @@ void draw_basket(Basket* basket) {
   switch (basket->kind) {
     case BK_Cloud: {
       BasketCloud* c = (BasketCloud*)&basket->data;
-      Texture2D* tex = &basket->texture;
+      Texture2D* tex = basket->texture;
       DrawTexturePro(
-        basket->texture,
+        *basket->texture,
         (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
         (Rectangle){
           .x      = cloud_position_x(c->t, c->psi),
