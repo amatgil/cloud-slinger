@@ -29,6 +29,7 @@ State init(bool debug_mode) {
     .score = 0,
     .textures = {
       .default_purple  = LoadTexture("../assets/default_purple.png"),
+      .sun             = LoadTexture("../assets/sun.png"),
       .slingshot       = LoadTexture("../assets/slingshot.png"),
       .ball            = LoadTexture("../assets/ball.png"),
       .cloud           = LoadTexture("../assets/cloud.png"),
@@ -83,11 +84,13 @@ void update(State* st) {
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }
 
+// Assumes we're in drawing mode
 void render(State* st) {
   draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);
   draw_score(st);
+  draw_sun(st);
 
   Ball* ball = st->balls;
   while (ball) {

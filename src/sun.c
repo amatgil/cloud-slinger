@@ -2,6 +2,8 @@
 #include "constants.c"
 #include "definitions.c"
 #include "raylib.h"
+#include "raymath.h"
+#include <assert.h>
 #include <math.h>
 
 bool laser_is_live(State* st) {
@@ -56,6 +58,16 @@ void draw_laser(State* st) {
   assert(st != NULL);
   // TODO
 
+}
+
+void draw_sun(State* st) {
+  assert(st != NULL);
+  Texture2D* tex = &st->textures.sun;
+  DrawTexturePro(
+    *tex,
+    (Rectangle){.x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
+    (Rectangle){.x = 0.0, .y = 0.0, .width = SUN_RADIUS, .height = SUN_RADIUS},
+    Vector2Zero(), 0.0, WHITE);
 }
 
 // Assumes we're in drawing mode
