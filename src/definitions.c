@@ -32,7 +32,7 @@ typedef struct {
 } State ;
 
 
-State new_state() {
+State new_state(void) {
   Textures textures = (Textures){};
   return (State){
     .debug_mode = false,
@@ -47,7 +47,7 @@ State new_state() {
 }
 
 
-void add_ball(State* st, i32 ball_x, i32 ball_y, i32 ball_vel_x, i32 ball_vel_y) {
+void add_ball(State* st, f32 ball_x, f32 ball_y, f32 ball_vel_x, f32 ball_vel_y) {
   Ball* ball = (Ball*)malloc(sizeof(Ball));
   ball->x = ball_x;
   ball->y = ball_y;

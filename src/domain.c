@@ -8,7 +8,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-Vector2 get_slingshot_focus() {
+Vector2 get_slingshot_focus(void) {
   Vector2 anchor_base = SLINGSHOT_CENTER;
 
   f32 length = MIN(Vector2Distance(GetMousePosition(), anchor_base), SLINGSHOT_MAX_RADIUS);
@@ -21,10 +21,10 @@ void summon_ball(State* st) {
 
   Vector2 focus = get_slingshot_focus();
   f32 power_factor = (f32)Vector2Distance(focus, SLINGSHOT_CENTER) / SLINGSHOT_MAX_RADIUS;
-  f32 theta = Vector2LineAngle(focus, SLINGSHOT_CENTER) + TAU/2.0;
+  f32 theta = Vector2LineAngle(focus, SLINGSHOT_CENTER) + TAU/2.0f;
 
-  i32 vel_x = -cos(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
-  i32 vel_y =  sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
+  f32 vel_x = (f32)-cos(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
+  f32 vel_y =  (f32)sin(theta) * BALL_MAXIMUM_INITIAL_SPEED*power_factor;
 
   add_ball(st, focus.x, focus.y, vel_x, vel_y);
   st->cooldown_left = BALL_COOLDOWN;

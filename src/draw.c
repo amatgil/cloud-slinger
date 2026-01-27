@@ -11,7 +11,6 @@
 
 void draw_basket(Basket* basket) {
   assert(basket != NULL);
-  //DrawRectangleRec(cloud_rectangle(st->cloud_t, psi, height_percent), COLOR_CLOUD);
 
   switch (basket->kind) {
     case BK_Cloud: {

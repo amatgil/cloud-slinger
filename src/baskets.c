@@ -22,11 +22,11 @@ typedef enum {
   BK_HotAirBalloon,
 } BasketKind;
 
+// I wanna go back to rust :(
 typedef union {
   BasketCloud cloud;
   BasketBird  bird;
 } BasketData;
-// I wanna go back to rust :(
 typedef struct Basket {
   BasketKind kind;
   BasketData data;
@@ -42,7 +42,7 @@ typedef struct Basket {
 
 // x position
 f32 cloud_position_x(f32 t, f32 psi) {
-  f64 angle = (f64)(t*TAU + psi);
+  f32 angle = t*TAU + psi;
   return ((f32)sin(angle) + 1.0f)/2.0f * (f32)(GetScreenWidth()-CLOUD_WIDTH);
 }
 
@@ -106,6 +106,7 @@ Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, u32 points) {
     .kind = BK_Cloud,
     .data = (BasketData) { .cloud = (BasketCloud){.t = 0.0, .psi = psi, .y = y} },
     .apparent_width = CLOUD_WIDTH,
+    .apparent_height = CLOUD_HEIGHT,
     .hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X,
     .hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y,
     .marked_for_despawn = false,

@@ -13,5 +13,6 @@
 -Wcast-qual
 -Wswitch-enum
 -Wconversion
+-Wuninitialized
 -Wunreachable-code
 -Wmissing-field-initializers
