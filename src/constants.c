@@ -20,7 +20,7 @@
 
 #define BALL_RADIUS 8
 
-#define LASER_VEL 30
+#define LASER_VEL 300
 #define LASER_MIN_COOLDOWN 10
 #define LASER_MAX_COOLDOWN 30
 #define LASER_MIN_ANGLE 0.2f

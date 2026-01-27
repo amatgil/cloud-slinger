@@ -10,15 +10,22 @@ bool laser_is_live(State* st) {
   return st->laser_magnitude < INFINITY;
 }
 
+void start_new_cooldown(State* st) {
+  f32 range = LASER_MAX_COOLDOWN-LASER_MIN_COOLDOWN;
+  st->laser_cooldown = (f32)rand()/(f32)RAND_MAX * range  + LASER_MIN_COOLDOWN;
+}
+
 // Throws a laser if the cooldown allows
 void throw_laser(State* st) {
   assert(st != NULL);
-  if (laser_is_live(st)) return;
+  if (laser_is_live(st) || st->laser_cooldown >= 0) return;
 
   f32* magnitude = &st->laser_magnitude;
   f32* angle = &st->laser_angle;
 
   *magnitude = 0.0;
+  st->laser_cooldown = 0.0;
+
   f32 random = ((f32)rand()) / (f32)RAND_MAX;
   f32 range = LASER_MAX_ANGLE - LASER_MIN_ANGLE;
   *angle = (f32)random * range + LASER_MIN_ANGLE;
@@ -37,7 +44,10 @@ void advance_laser(State* st, f32 DeltaTime) {
   if (laser_is_live(st)) *magnitude += LASER_VEL*DeltaTime;
   else st->laser_cooldown -= DeltaTime;
 
-  if (*magnitude > (f32)GetScreenHeight()) *magnitude = INFINITY;
+  if (*magnitude > (f32)MAX(GetScreenWidth(), GetScreenHeight())) {
+    *magnitude = INFINITY;
+    start_new_cooldown(st);
+  }
 }
 
 
@@ -63,8 +73,8 @@ void draw_laser(State* st) {
     st->laser_magnitude);
 
   Rectangle r = (Rectangle) {
-    .x = center.x,
-    .y = center.y,
+    .x = center.x + LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
+    .y = center.y - LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
     .width  = LASER_WIDTH,
     .height = LASER_HEIGHT,
   };

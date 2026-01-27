@@ -76,7 +76,6 @@ void update(State* st) {
   {
     throw_laser(st);
     advance_laser(st, DeltaTime);
-    draw_laser(st);
     handle_laser_collisions(st);
   }
 
@@ -91,6 +90,7 @@ void update(State* st) {
 void render(State* st) {
   draw_slingshot(st);
   draw_slingshot_strings();
+  draw_laser(st);
   draw_ready_ball(st);
   draw_score(st);
   draw_sun(st);
