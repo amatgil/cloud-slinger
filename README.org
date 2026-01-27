@@ -1,4 +1,15 @@
 * Cloud Slinger
+** Usage
+#+BEGIN_SRC
+cd src/
+./compile.sh && ./main
+#+END_SRC
+*** Flags
+
+- =-d=: Enable debug mode (shows hitboxes, mouse position, internal state, etc.)
+- =-w WIDTH=: Set screen width to =WIDTH=
+- =-h HEIGHT=: Set screen width to =HEIGHT=
+
 ** Types of Baskets
 - Cloud: Always on screen, moving sinusoidally
 - Pelican: Moves horizontally, straight across, leaving the screen
