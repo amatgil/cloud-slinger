@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/param.h>
+#include <time.h>
 #include "definitions.c"
 #include "draw.c"
 #include "constants.c"
@@ -16,6 +17,7 @@ i32 INITIAL_SCREEN_HEIGHT = 700;
 
 
 State init(bool debug_mode) {
+  srand((u32)time(NULL));
   InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
   SetTargetFPS(60.0);
 
@@ -77,6 +79,7 @@ void update(State* st) {
     throw_laser(st);
     advance_laser(st, DeltaTime);
     handle_laser_collisions(st);
+    if (st->debug_mode && IsKeyPressed(KEY_L)) st->laser_cooldown = 0.0;
   }
 
 
@@ -88,11 +91,10 @@ void update(State* st) {
 
 // Assumes we're in drawing mode
 void render(State* st) {
-  draw_slingshot(st);
-  draw_slingshot_strings();
   draw_laser(st);
   draw_ready_ball(st);
   draw_score(st);
+  draw_slingshot_strings(); draw_slingshot(st);
   draw_sun(st);
 
   Ball* ball = st->balls;

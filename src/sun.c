@@ -51,6 +51,20 @@ void advance_laser(State* st, f32 DeltaTime) {
   }
 }
 
+Rectangle get_laser_rect(State* st) {
+  Vector2 center = Vector2Scale(
+    Vector2Rotate(
+      (Vector2){.x=0.0, .y=1.0},
+      -st->laser_angle),
+    st->laser_magnitude);
+
+  return (Rectangle) {
+    .x = center.x + LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
+    .y = center.y - LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
+    .width  = LASER_WIDTH,
+    .height = LASER_HEIGHT,
+  };
+}
 
 bool laser_ball_collision(State* st, Ball* ball) {
   assert(st != NULL);
@@ -69,20 +83,8 @@ void draw_laser(State* st) {
   assert(st != NULL);
   if (!laser_is_live(st)) return;
 
-  Vector2 center = Vector2Scale(
-    Vector2Rotate(
-      (Vector2){.x=0.0, .y=1.0},
-      -st->laser_angle),
-    st->laser_magnitude);
-
-  Rectangle r = (Rectangle) {
-    .x = center.x + LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
-    .y = center.y - LASER_HEIGHT*cosf(st->laser_angle)/2.0f,
-    .width  = LASER_WIDTH,
-    .height = LASER_HEIGHT,
-  };
   f32 angle = -(TAU/2.0f + TAU/4.0f + st->laser_angle);
-  DrawRectanglePro(r, Vector2Zero(), angle*RAD2DEG, COLOR_LASER);
+  DrawRectanglePro(get_laser_rect(st), Vector2Zero(), angle*RAD2DEG, COLOR_LASER);
 }
 
 // Assumes we're in drawing mode
