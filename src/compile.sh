@@ -1,7 +1,7 @@
 #!/bin/sh
 
 FLAGS=""
-while read p; do FLAGS="$FLAGS $p"; done < compile_flags.txt
+while read p; do FLAGS="$FLAGS $p"; done < ../compile_flags.txt
 
 LIBS="-lraylib -lGL -lm -lpthread -ldl -lrt -lX11"
 

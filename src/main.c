@@ -32,7 +32,7 @@ void update(State* st) {
     basket = basket->next;
   }
 
-  if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->cooldown_left == 0) summon_ball(st);
+  if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->cooldown_left <= 0) summon_ball(st);
   st->cooldown_left -= DeltaTime;
   st->cooldown_left = MAX(st->cooldown_left, 0);
 
@@ -42,8 +42,6 @@ void update(State* st) {
 }
 
 void render(State* st) {
-  f32 h = (f32)GetScreenHeight();
-
   draw_slingshot(st);
   draw_slingshot_strings();
   draw_ready_ball(st);
@@ -58,6 +56,7 @@ void render(State* st) {
   Basket* basket = st->baskets;
   while (basket) {
     draw_basket(basket);
+    if (st->debug_mode) draw_basket_hitbox(basket);
     basket = basket->next;
   }
 
@@ -65,13 +64,6 @@ void render(State* st) {
      draw_mouse_circle();
      draw_slingshot_radius();
      draw_numeric_debug_info(st);
-
-     Basket* basket = st->baskets;
-     while (basket) {
-       draw_basket_hitbox(basket);
-       basket = basket->next;
-     }
-
   }
 }
 
@@ -90,8 +82,8 @@ State init(bool debug_mode) {
 
   Texture2D cloud = LoadTexture("../assets/cloud.png");
 
-  Basket* cloud_lower = new_basket_cloud(&cloud, 0.0, CLOUD_LOWER_Y_PERCENTAGE*GetScreenHeight(), 1);
-  Basket* cloud_upper = new_basket_cloud(&cloud, 1.6, CLOUD_UPPER_Y_PERCENTAGE*GetScreenHeight(), 2);
+  Basket* cloud_lower = new_basket_cloud(&cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
+  Basket* cloud_upper = new_basket_cloud(&cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
   cloud_upper->next = cloud_lower;
   st.baskets = cloud_upper;
 
@@ -99,7 +91,7 @@ State init(bool debug_mode) {
 }
 
 
-void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, char* flag, i32* where) {
+void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, const char* flag, i32* where) {
   if (strcmp(TextToLower(argv[i]), flag) == 0) {
     if (i+1 >= argc) {
       printf("'%s' given without actual value\n", flag);
@@ -107,7 +99,7 @@ void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, char* flag, i32* 
     }
 
     char* endptr;
-    i32 x = strtol(argv[i+1], &endptr, 10); // Assumeixo que és correcte perquè C va com vol
+    i32 x = (i32)strtol(argv[i+1], &endptr, 10); // Assumeixo que és correcte perquè C va com vol
     if (*endptr != 0) {
       printf("'The argument of '%s' ('%s') was not a valid integer\n", flag, argv[i+1]);
       exit(2);
