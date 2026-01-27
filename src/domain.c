@@ -82,3 +82,40 @@ void clear_errant_balls(State* st) {
     index += 1;
   }
 }
+
+
+// deletes ONE basket that is permanently off screen.
+// If there's more, the next frames can deal with them
+void clear_errant_baskets(State* st) {
+  assert(st != NULL);
+  Basket* b = st->baskets;
+  u32 index = 0;
+
+  while (b) {
+    f32 x, y;
+    switch (b->kind) {
+      case BK_Cloud: {
+        BasketCloud* c = (BasketCloud*)&b->data;
+        x = cloud_position_x(c->t, c->psi);
+        y = c->y;
+        break;
+      }
+      case BK_Pelican: {
+        BasketPelican* p = (BasketPelican*)&b->data;
+        x = p->x;
+        y = p->y;
+      }
+      case BK_HotAirBalloon: {
+        assert(false);
+      }
+    }
+
+    if (fabs(x) > 20*GetScreenWidth() || fabs(y) > 20*GetScreenHeight()) {
+      remove_basket(st, index);
+      return;
+    }
+    b = b->next;
+    index += 1;
+  }
+
+}

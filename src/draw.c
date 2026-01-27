@@ -5,9 +5,9 @@
 #include <raymath.h>
 #include <stdio.h>
 #include <sys/param.h>
-#include "definitions.c"
 #include "constants.c"
 #include "domain.c"
+#include "definitions.c"
 
 void draw_basket(Basket* basket) {
   assert(basket != NULL);
@@ -29,7 +29,17 @@ void draw_basket(Basket* basket) {
     }
 
     case BK_Pelican: {
-      assert(false);
+      BasketPelican* b = (BasketPelican*)&basket->data;
+      Texture2D* tex = basket->texture;
+      DrawTexturePro(
+        *basket->texture,
+        (Rectangle){ .x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},
+        (Rectangle){
+          .x      = b->x,
+          .y      = b->y,
+          .width  = basket->apparent_width,
+          .height = basket->apparent_height},
+        Vector2Zero(), 0.0, WHITE);
       break;
     }
 

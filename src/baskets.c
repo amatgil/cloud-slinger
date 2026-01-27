@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
+
 typedef struct {
   f32 t; f32 psi; // these two make up x
   f32 y;
@@ -15,6 +16,7 @@ typedef struct {
 typedef struct {
   f32 x;
   f32 y;
+  bool going_left;
 } BasketPelican;
 
 typedef enum {
@@ -37,7 +39,6 @@ typedef struct Basket {
   f32 hitbox_height;
   u32 points; // How many points it gives
   Texture2D* texture;
-  bool marked_for_despawn;
   struct Basket* next;
 } Basket;
 
@@ -74,7 +75,14 @@ Rectangle basket_hitbox(Basket* basket) {
     }
 
     case BK_Pelican: {
-      assert(false);
+      BasketPelican* b = (BasketPelican*)&basket->data;
+      // TODO: Fix this, depends on the texture a lot (and also on going_left)
+      return (Rectangle) {
+        .x = b->x + 10,
+        .y = b->y + 10,
+        .width = 20,
+        .height = 30,
+      };
     }
     case BK_HotAirBalloon: {
       assert(false);
@@ -91,7 +99,9 @@ void update_basket_position(Basket* basket, f32 DeltaTime) {
     }
 
     case BK_Pelican: {
-      assert(false);
+      BasketPelican* b = (BasketPelican*)&basket->data;
+      if (b->going_left) b->x -= PELICAN_VEL_X*DeltaTime;
+      else               b->x += PELICAN_VEL_X+DeltaTime;
       break;
     }
 
@@ -110,7 +120,6 @@ Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, u32 points) {
     .apparent_height = CLOUD_HEIGHT,
     .hitbox_width = CLOUD_WIDTH*CLOUD_BASKET_PERCENTAGE_X,
     .hitbox_height = CLOUD_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y,
-    .marked_for_despawn = false,
     .points = points,
     .texture = texture, // temporary
     .next = NULL,
@@ -120,15 +129,16 @@ Basket* new_basket_cloud(Texture2D* texture, f32 psi, f32 y, u32 points) {
   return ptr;
 }
 
-Basket* new_basket_pelican(Texture2D* texture, f32 x, f32 y, u32 points) {
+Basket* new_basket_pelican(Texture2D* texture, bool going_left, f32 y, u32 points) {
+  f32 x = 0;
+  if (going_left) x = (f32)GetScreenWidth();
   Basket basket = (Basket){
     .kind = BK_Pelican,
-    .data = (BasketData) { .pelican = (BasketPelican){.x = x, .y = y} },
+    .data = (BasketData) { .pelican = (BasketPelican){.x = x, .y = y, .going_left = going_left} },
     .apparent_width = PELICAN_WIDTH,
     .apparent_height = PELICAN_HEIGHT,
     .hitbox_width = PELICAN_WIDTH*CLOUD_BASKET_PERCENTAGE_X,
     .hitbox_height = PELICAN_HEIGHT*CLOUD_BASKET_PERCENTAGE_Y,
-    .marked_for_despawn = false,
     .points = points,
     .texture = texture, // temporary
     .next = NULL,

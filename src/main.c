@@ -31,6 +31,7 @@ void update(State* st) {
     update_basket_position(basket, DeltaTime);
     basket = basket->next;
   }
+  clear_errant_balls(st);
 
   if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->cooldown_left <= 0) summon_ball(st);
   st->cooldown_left -= DeltaTime;
@@ -71,17 +72,28 @@ State init(bool debug_mode) {
   InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
   SetTargetFPS(60.0);
 
-  State st = new_state();
-  st.debug_mode = debug_mode;
+  State st = (State){
+    .debug_mode = debug_mode,
+    .paused = false,
+    .baskets = NULL,
+    .balls = NULL,
+    .clicking_last_frame = false,
+    .cooldown_left = 0.0,
+    .score = 0,
+    .textures = {
+      .slingshot = LoadTexture("../assets/slingshot.png"),
+      .ball      = LoadTexture("../assets/ball.png"),
+      .cloud     = LoadTexture("../assets/cloud.png"),
+      .pelican   = LoadTexture("../assets/ball.png")
+    }
+  };
 
-  st.textures.slingshot = LoadTexture("../assets/slingshot.png");;
-  st.textures.ball      = LoadTexture("../assets/ball.png");
-  st.textures.cloud     = LoadTexture("../assets/cloud.png");
-
-  Basket* cloud_lower = new_basket_cloud(&st.textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
   Basket* cloud_upper = new_basket_cloud(&st.textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
-  cloud_upper->next = cloud_lower;
+  //Basket* cloud_lower = new_basket_cloud(&st.textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
+  Basket* pelican_lower = new_basket_pelican(&st.textures.pelican, true, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 4);
+  cloud_upper->next = pelican_lower;
   st.baskets = cloud_upper;
+
 
   return st;
 }

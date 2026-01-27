@@ -34,20 +34,6 @@ typedef struct {
 } State ;
 
 
-State new_state(void) {
-  Textures textures = (Textures){};
-  return (State){
-    .debug_mode = false,
-    .paused = false,
-    .baskets = NULL,
-    .balls = NULL,
-    .clicking_last_frame = false,
-    .cooldown_left = 0.0,
-    .score = 0,
-    .textures = textures
-  };
-}
-
 
 void add_ball(State* st, f32 ball_x, f32 ball_y, f32 ball_vel_x, f32 ball_vel_y) {
   Ball* ball = (Ball*)malloc(sizeof(Ball));
@@ -94,6 +80,7 @@ u32 count_baskets(State* st) {
 }
 
 void remove_ball(State* st, u32 index) {
+  assert(st != NULL);
   Ball* prev = NULL;
   Ball* curr = st->balls;
   while (curr) {
@@ -101,6 +88,30 @@ void remove_ball(State* st, u32 index) {
       Ball* next = curr->next;
       if (next == NULL && prev == NULL) st->balls = NULL;
       if (next != NULL && prev == NULL) st->balls = next;
+      if (next == NULL && prev != NULL) prev->next = NULL;
+      if (next != NULL && prev != NULL) prev->next = next;
+
+      free(curr);   // i miss Drop :(
+      return;
+    }
+    prev = curr;
+    curr = curr->next;
+    index -= 1;
+  }
+}
+
+
+// This is here instead of in baskets.c because i don't want to make
+// five thousand header files
+void remove_basket(State* st, u32 index) {
+  assert(st != NULL);
+  Basket* prev = NULL;
+  Basket* curr = st->baskets;
+  while (curr) {
+    if (index == 0) {
+      Basket* next = curr->next;
+      if (next == NULL && prev == NULL) st->baskets = NULL;
+      if (next != NULL && prev == NULL) st->baskets = next;
       if (next == NULL && prev != NULL) prev->next = NULL;
       if (next != NULL && prev != NULL) prev->next = next;
 
