@@ -46,36 +46,40 @@ State init(bool debug_mode) {
 }
 
 void update(State* st) {
-  // t = fract(t+DT*dt)
-  Ball* ball = st->balls;
-  while (ball) {
-    ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
-    ball->y     += ball->vel_y*DeltaTime;
-    ball->x     += ball->vel_x*DeltaTime;
-    ball->angle += BALL_ROTATE_SPEED*DeltaTime;
-    ball = ball->next;
+  {
+    Ball* ball = st->balls;
+    while (ball) {
+      ball->vel_y += GRAVITY_ACCELERATION*DeltaTime;
+      ball->y     += ball->vel_y*DeltaTime;
+      ball->x     += ball->vel_x*DeltaTime;
+      ball->angle += BALL_ROTATE_SPEED*DeltaTime;
+      ball = ball->next;
+    }
+    clear_errant_balls(st);
+    handle_ball_baskets_collisions(st);
   }
-  clear_errant_balls(st);
 
-  Basket* basket = st->baskets;
-  while (basket) {
-    update_basket_position(basket, DeltaTime);
-    basket = basket->next;
+  {
+    Basket* basket = st->baskets;
+    while (basket) {
+      update_basket_position(basket, DeltaTime);
+      basket = basket->next;
+    }
+    clear_errant_baskets(st);
   }
-  clear_errant_baskets(st);
 
-  handle_ball_baskets_collisions(st);
 
-  throw_laser(st);
-  advance_laser(st, DeltaTime);
-  handle_laser_collision(st);
+  {
+    throw_laser(st);
+    advance_laser(st, DeltaTime);
+    draw_laser(st);
+    handle_laser_collisions(st);
+  }
 
 
   if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->slingshot_cooldown <= 0) summon_ball(st);
   st->slingshot_cooldown -= DeltaTime;
   st->slingshot_cooldown = MAX(st->slingshot_cooldown, 0);
-
-
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }
 

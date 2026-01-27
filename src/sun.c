@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include <math.h>
 
-bool have_live_laser(State* st) {
+bool laser_is_live(State* st) {
   return st->laser_magnitude < INFINITY;
 }
 
@@ -32,20 +32,27 @@ void advance_laser(State* st, f32 DeltaTime) {
   assert(st != NULL);
   f32* magnitude = &st->laser_magnitude;
 
-  if (have_live_laser(st)) {
-     *magnitude += LASER_VEL*DeltaTime;
-     if (*magnitude > (f32)GetScreenHeight()) *magnitude = INFINITY;
-  } else st->laser_cooldown -= DeltaTime;
+  if (laser_is_live(st)) *magnitude += LASER_VEL*DeltaTime;
+  else st->laser_cooldown -= DeltaTime;
+
+  if (*magnitude > (f32)GetScreenHeight()) *magnitude = INFINITY;
 }
 
 
-void handle_laser_collision(State* st) {
+bool laser_ball_collision(State* st, Ball* ball) {
+  assert(st != NULL);
+  assert(ball != NULL);
+
+}
+
+void handle_laser_collisions(State* st) {
   assert(st != NULL);
 
 }
 
 
 void draw_laser(State* st) {
+  assert(st != NULL);
   // TODO
 
 }
