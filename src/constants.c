@@ -28,6 +28,7 @@
 #define LASER_MAX_ANGLE 0.75f
 #define LASER_WIDTH 20
 #define LASER_HEIGHT 10
+#define LASER_WARNING 1
 #define SUN_RADIUS 70
 
 #define SLINGSHOT_WIDTH 160

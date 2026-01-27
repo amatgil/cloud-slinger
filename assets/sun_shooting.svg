@@ -8,10 +8,12 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
-   sodipodi:docname="sun.svg"
-   inkscape:export-filename="sun.png"
+   sodipodi:docname="sun_shooting.svg"
+   inkscape:export-filename="sun_shooting.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
+   inkscape:export-batch-path="/home/casenc/code/c/cloud-slinger/assets"
+   inkscape:export-batch-name="sun"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -27,8 +29,8 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="1.4142136"
-     inkscape:cx="60.45763"
-     inkscape:cy="129.40054"
+     inkscape:cx="148.84598"
+     inkscape:cy="132.22897"
      inkscape:window-width="1912"
      inkscape:window-height="1052"
      inkscape:window-x="1680"
@@ -42,7 +44,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#deff00;fill-opacity:0.953392;stroke:none;stroke-width:16.1268;stroke-opacity:0.956863"
+       style="fill:#ffe726;fill-opacity:0.95339197;stroke:none;stroke-width:16.127;stroke-opacity:0.956863;stroke-dasharray:none"
        id="path1"
        cx="-2.9976022e-15"
        cy="-2.9976022e-15"
@@ -55,14 +57,39 @@
     <circle
        style="fill:#000000;fill-opacity:0.953392;stroke-width:17.62;stroke-opacity:0.956863"
        id="path3"
-       cx="71.834373"
-       cy="23.283333"
+       cx="72.796417"
+       cy="30.884268"
        r="9.1281252" />
     <circle
        style="fill:#000000;fill-opacity:0.953392;stroke-width:17.62;stroke-opacity:0.956863"
        id="path3-3"
-       cx="25.664585"
-       cy="18.25625"
+       cx="26.065357"
+       cy="26.979715"
        r="9.1281252" />
+    <ellipse
+       style="fill:#ed5308;fill-opacity:0;stroke:#000000;stroke-width:10.5001;stroke-dasharray:none;stroke-opacity:1"
+       id="path4"
+       cx="39.269539"
+       cy="66.689911"
+       rx="14.400792"
+       ry="14.100775" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:5.68787;stroke-dasharray:none;stroke-opacity:1"
+       id="rect6"
+       width="26.849602"
+       height="8.2572756"
+       x="22.067379"
+       y="-9.3411856"
+       ry="1.7990841"
+       transform="matrix(0.85290095,0.52207276,-0.61445224,0.78895402,0,0)" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:5.68787;stroke-dasharray:none;stroke-opacity:1"
+       id="rect6-1"
+       width="26.849602"
+       height="8.2572756"
+       x="43.974316"
+       y="45.874039"
+       ry="1.7990841"
+       transform="matrix(0.85811547,-0.51345676,0.41395651,0.91029666,0,0)" />
   </g>
 </svg>

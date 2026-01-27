@@ -111,6 +111,7 @@ void draw_laser_hitbox(State* st) {
 void draw_sun(State* st) {
   assert(st != NULL);
   Texture2D* tex = &st->textures.sun;
+  if (st->laser_cooldown < LASER_WARNING) tex = &st->textures.sun_shooting;
   DrawTexturePro(
     *tex,
     (Rectangle){.x = 0.0, .y = 0.0, .width = (f32)tex->width, .height = (f32)tex->height},

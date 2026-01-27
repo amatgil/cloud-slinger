@@ -9,6 +9,7 @@
 typedef struct {
   Texture2D default_purple;
   Texture2D sun;
+  Texture2D sun_shooting;
   Texture2D slingshot;
   Texture2D ball;
   Texture2D cloud;

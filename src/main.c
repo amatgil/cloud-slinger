@@ -32,6 +32,7 @@ State init(bool debug_mode) {
     .textures = {
       .default_purple  = LoadTexture("../assets/default_purple.png"),
       .sun             = LoadTexture("../assets/sun.png"),
+      .sun_shooting    = LoadTexture("../assets/sun_shooting.png"),
       .slingshot       = LoadTexture("../assets/slingshot.png"),
       .ball            = LoadTexture("../assets/ball.png"),
       .cloud           = LoadTexture("../assets/cloud.png"),
