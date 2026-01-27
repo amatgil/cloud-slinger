@@ -14,6 +14,36 @@ i32 INITIAL_SCREEN_WIDTH  = 350;
 i32 INITIAL_SCREEN_HEIGHT = 700;
 
 
+State init(bool debug_mode) {
+  InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
+  SetTargetFPS(60.0);
+
+  State st = (State){
+    .debug_mode = debug_mode,
+    .paused = false,
+    .baskets = NULL,
+    .balls = NULL,
+    .clicking_last_frame = false,
+    .cooldown_left = 0.0,
+    .score = 0,
+    .textures = {
+      .default_purple  = LoadTexture("../assets/default_purple.png"),
+      .slingshot       = LoadTexture("../assets/slingshot.png"),
+      .ball            = LoadTexture("../assets/ball.png"),
+      .cloud           = LoadTexture("../assets/cloud.png"),
+      .pelican         = LoadTexture("../assets/default_purple.png"),
+    }
+  };
+
+  Basket* cloud_upper = new_basket_cloud(&st.textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
+  //Basket* cloud_lower = new_basket_cloud(&st.textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
+  Basket* pelican_lower = new_basket_pelican(&st.textures.pelican, true, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 4);
+  cloud_upper->next = pelican_lower;
+  st.baskets = cloud_upper;
+
+  return st;
+}
+
 void update(State* st) {
   // t = fract(t+DT*dt)
   Ball* ball = st->balls;
@@ -68,35 +98,6 @@ void render(State* st) {
   }
 }
 
-State init(bool debug_mode) {
-  InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
-  SetTargetFPS(60.0);
-
-  State st = (State){
-    .debug_mode = debug_mode,
-    .paused = false,
-    .baskets = NULL,
-    .balls = NULL,
-    .clicking_last_frame = false,
-    .cooldown_left = 0.0,
-    .score = 0,
-    .textures = {
-      .slingshot = LoadTexture("../assets/slingshot.png"),
-      .ball      = LoadTexture("../assets/ball.png"),
-      .cloud     = LoadTexture("../assets/cloud.png"),
-      .pelican   = LoadTexture("../assets/ball.png")
-    }
-  };
-
-  Basket* cloud_upper = new_basket_cloud(&st.textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
-  //Basket* cloud_lower = new_basket_cloud(&st.textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
-  Basket* pelican_lower = new_basket_pelican(&st.textures.pelican, true, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 4);
-  cloud_upper->next = pelican_lower;
-  st.baskets = cloud_upper;
-
-
-  return st;
-}
 
 
 void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, const char* flag, i32* where) {

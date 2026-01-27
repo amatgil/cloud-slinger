@@ -7,6 +7,7 @@
 #include "baskets.c"
 
 typedef struct {
+  Texture2D default_purple;
   Texture2D slingshot;
   Texture2D ball;
   Texture2D cloud;
