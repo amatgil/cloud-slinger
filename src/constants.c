@@ -20,6 +20,11 @@
 
 #define BALL_RADIUS 8
 
+#define INITIAL_HP 50.0f
+#define INITIAL_HP_DECREASE_VEL -0.03f
+#define     MAX_HP_DECREASE_VEL -1.0f
+#define         HP_DECREASE_ACC -0.02f
+
 #define LASER_VEL 300
 #define LASER_MIN_COOLDOWN 10
 #define LASER_MAX_COOLDOWN 30

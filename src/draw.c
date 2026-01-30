@@ -109,10 +109,25 @@ void draw_ready_ball(State* st) {
 // Assumes we're in drawing mode
 void draw_score(State* st) {
   assert(st != NULL);
-  char buf[256];
-  sprintf(buf, "%d", st->score);
-  i32 width = MeasureText(buf, SCORE_FONTSIZE);
-  DrawText(buf, GetScreenWidth()/2 - width/2, SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
+  u32 available_width = (u32)GetScreenWidth()-(u32)SUN_RADIUS;
+
+  {
+    char buf[256];
+    sprintf(buf, "%0.0f", st->hp);
+    i32 width_hp = MeasureText(buf, SCORE_FONTSIZE);
+    DrawText(buf,
+      SUN_RADIUS + 1*available_width/4 - (u32)width_hp/2,
+      SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
+  }
+
+  {
+    char buf[256];
+    sprintf(buf, "%d", st->score);
+    i32 width_score = MeasureText(buf, SCORE_FONTSIZE);
+    DrawText(buf,
+      SUN_RADIUS + 5*available_width/8 - (u32)width_score/2,
+      SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
+  }
 }
 
 // Assumes we're in drawing mode
@@ -137,7 +152,7 @@ void draw_basket_hitbox(Basket* basket) {
 // Assumes we're in drawing mode
 void draw_numeric_state_info(State* st) {
   char buf[256];
-  DrawRectangle(0, GetScreenHeight()-(5+12*7), 100, 5+12*7, (Color){0, 0, 0, 130});
+  DrawRectangle(0, GetScreenHeight()-(5+12*7), 100, 5+12*8, (Color){0, 0, 0, 130});
 
   sprintf(buf, "Cooldown: %.2f", st->slingshot_cooldown);
   DrawText(buf, 5, GetScreenHeight()-(5+12*1), 12, WHITE);
@@ -159,5 +174,8 @@ void draw_numeric_state_info(State* st) {
 
   sprintf(buf, "Laser time: %.2f", st->laser_cooldown);
   DrawText(buf, 5, GetScreenHeight()-(5+12*7), 12, WHITE);
+
+  sprintf(buf, "Hp dec vel : %.2f", st->hp_decrease_vel);
+  DrawText(buf, 5, GetScreenHeight()-(5+12*8), 12, WHITE);
 
 }

@@ -31,6 +31,8 @@ typedef struct {
   Ball* balls;
   bool clicking_last_frame;
   f32 slingshot_cooldown;
+  f32 hp;
+  f32 hp_decrease_vel;
   u32 score;
   f32 laser_angle, laser_magnitude, laser_cooldown; // Magnitude is NaN when no laser
   Textures textures;

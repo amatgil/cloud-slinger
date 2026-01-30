@@ -16,6 +16,14 @@ Vector2 get_slingshot_focus(void) {
   return Vector2Add(anchor_base, Vector2Scale(dir, length));
 }
 
+void handle_scoring_and_hp(State* st, f32 DeltaTime) {
+  assert(st != NULL);
+
+  st->hp_decrease_vel  = MAX(st->hp_decrease_vel+DeltaTime*HP_DECREASE_ACC,
+                             MAX_HP_DECREASE_VEL);
+  st->hp              += DeltaTime * st->hp_decrease_vel;
+}
+
 void summon_ball(State* st) {
   assert(st != NULL);
 
@@ -55,6 +63,7 @@ void handle_ball_baskets_collisions(State* st) {
         if (ball_basket_collision(ball, basket)) {
           if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with lower cloud\n", ball->x, ball->y, index);
           st->score += basket->points;
+          st->hp += (f32)basket->points;
           remove_ball(st, index);
           return;
         }

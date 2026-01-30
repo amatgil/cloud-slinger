@@ -28,6 +28,8 @@ State init(bool debug_mode) {
     .balls = NULL,
     .clicking_last_frame = false,
     .slingshot_cooldown = 0.0,
+    .hp = INITIAL_HP,
+    .hp_decrease_vel = INITIAL_HP_DECREASE_VEL,
     .score = 0,
     .textures = {
       .default_purple  = LoadTexture("../assets/default_purple.png"),
@@ -78,6 +80,7 @@ void update(State* st) {
 
 
   {
+    handle_scoring_and_hp(st, DeltaTime);
     throw_laser(st);
     advance_laser(st, DeltaTime);
     handle_laser_collisions(st);
