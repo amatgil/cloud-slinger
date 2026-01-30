@@ -10,7 +10,7 @@
 
 // Whether inputs corresponding to slingshot control
 // Returns false when e.g. you've died or you're in a menu
-bool gaming_is_allowed(State* st) {
+bool gaming_input_is_allowed(State* st) {
   return st->time_since_reset > GRACE_TIME_UPON_RESET && st->status == S_Playing;
 }
 
