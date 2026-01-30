@@ -28,7 +28,7 @@ bool reset_button(State* st) {
   DrawRectangleRounded(btn, 0.7f, 10, (Color){147, 153, 178, 255});
   DrawTextEx(st->font, text, (Vector2){.x=text_x,.y=text_y}, SCORE_FONTSIZE, 0.0, WHITE);
 
-  bool am_clicked = IsMouseButtonDown(0) &&
+  bool am_clicked = IsMouseButtonReleased(0) &&
                       CheckCollisionCircleRec(GetMousePosition(), 5, btn);
   return am_clicked;
 }

@@ -116,7 +116,7 @@ void update(State* st) {
       break;
     }
     case S_Dead: {
-      char buf[] = "You've died :(";
+      char buf[] = "You've died";
       DrawTextEx(st->font,
         buf,
         (Vector2){
