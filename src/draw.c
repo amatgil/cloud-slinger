@@ -57,7 +57,7 @@ void draw_slingshot_string(Vector2 a, Vector2 b) {
 }
 
 // Assumes we're in drawing mode
-void draw_slingshot_strings(void) {
+void draw_slingshot_strings(State* st) {
   f32 x = SLINGSHOT_CENTER.x;
   f32 y = SLINGSHOT_CENTER.y;
   f32 dx = SLINGSHOT_WIDTH  * SLINGSHOT_STRING_SEPARATION_X;
@@ -67,7 +67,7 @@ void draw_slingshot_strings(void) {
   Vector2 anchor_right = (Vector2){ .x = x + dx, .y = y + dy };
   Vector2 anchor_unheld = (Vector2){ .x = x, .y = y+(f32)SLINGSHOT_MAX_RADIUS/2 };
 
-  if (!IsMouseButtonDown(0)) {
+  if (!IsMouseButtonDown(0) || st->time_since_reset < GRACE_TIME_UPON_RESET) {
     draw_slingshot_string(anchor_left, anchor_unheld);
     draw_slingshot_string(anchor_right, anchor_unheld);
     return;
@@ -151,6 +151,7 @@ void draw_basket_hitbox(Basket* basket) {
 
 // Assumes we're in drawing mode
 void draw_numeric_state_info(State* st) {
+  assert(st != NULL);
   char buf[256];
   DrawRectangle(0, GetScreenHeight()-(5+12*7), 100, 5+12*8, (Color){0, 0, 0, 130});
 

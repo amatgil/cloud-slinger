@@ -24,7 +24,7 @@ void handle_scoring_and_hp(State* st, f32 DeltaTime) {
   st->hp              += DeltaTime * st->hp_decrease_vel;
 }
 
-void update_slingshot_status(State* st, f32 DeltaTime) {
+void update_slingshot_cooldown(State* st, f32 DeltaTime) {
   assert(st != NULL);
 
   st->slingshot_cooldown -= DeltaTime;

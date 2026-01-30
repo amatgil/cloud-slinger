@@ -10,48 +10,64 @@
 #include "constants.c"
 #include "sun.c"
 #include "domain.c"
+#include "dead.c"
 
 f32 DeltaTime;
 i32 INITIAL_SCREEN_WIDTH  = 350;
 i32 INITIAL_SCREEN_HEIGHT = 700;
 
+Textures init_textures(void) {
+  return (Textures)  {
+    .default_purple  = LoadTexture("../assets/default_purple.png"),
+    .sun             = LoadTexture("../assets/sun.png"),
+    .sun_shooting    = LoadTexture("../assets/sun_shooting.png"),
+    .slingshot       = LoadTexture("../assets/slingshot.png"),
+    .ball            = LoadTexture("../assets/ball.png"),
+    .cloud           = LoadTexture("../assets/cloud.png"),
+    .pelican         = LoadTexture("../assets/default_purple.png"),
+  };
+}
+
+// Assumes 'textures' is valid
+void reset(State* st) {
+  assert(st != NULL);
+  // Don't leak the memory lmfao
+  while (st->baskets) remove_basket(st, 0);
+  while (st->balls)   remove_ball(st, 0);
+
+  st->status = S_Playing;
+  st->time_since_reset = 0.0f;
+  st->paused = false;
+  st->baskets = NULL;
+  st->balls = NULL;
+  st->clicking_last_frame = false;
+  st->slingshot_cooldown = 0.0;
+  st->hp = INITIAL_HP;
+  st->hp_decrease_vel = INITIAL_HP_DECREASE_VEL;
+  st->score = 0;
+  st->laser_angle = 0.0;
+  st->laser_magnitude = INFINITY;
+  st->laser_cooldown = LASER_STARTING_COOLDOWN;
+
+
+  Basket* cloud_upper = new_basket_cloud(&st->textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
+  Basket* cloud_lower = new_basket_cloud(&st->textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
+  Basket* birb = new_basket_pelican(&st->textures.pelican, true, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight() + 40, 4);
+  cloud_lower->next = cloud_upper;
+  cloud_upper->next = birb;
+  st->baskets = cloud_lower;
+}
 
 State init(bool debug_mode) {
   srand((u32)time(NULL));
   InitWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Cloud Sling");
   SetTargetFPS(60.0);
 
-  State st = (State){
-    .debug_mode = debug_mode,
-    .paused = false,
-    .baskets = NULL,
-    .balls = NULL,
-    .clicking_last_frame = false,
-    .slingshot_cooldown = 0.0,
-    .hp = INITIAL_HP,
-    .hp_decrease_vel = INITIAL_HP_DECREASE_VEL,
-    .score = 0,
-    .textures = {
-      .default_purple  = LoadTexture("../assets/default_purple.png"),
-      .sun             = LoadTexture("../assets/sun.png"),
-      .sun_shooting    = LoadTexture("../assets/sun_shooting.png"),
-      .slingshot       = LoadTexture("../assets/slingshot.png"),
-      .ball            = LoadTexture("../assets/ball.png"),
-      .cloud           = LoadTexture("../assets/cloud.png"),
-      .pelican         = LoadTexture("../assets/default_purple.png"),
-    },
-    .laser_angle = 0.0,
-    .laser_magnitude = INFINITY,
-    .laser_cooldown = LASER_STARTING_COOLDOWN,
-  };
-
-  Basket* cloud_upper = new_basket_cloud(&st.textures.cloud, 1.6f, CLOUD_UPPER_Y_PERCENTAGE*(f32)GetScreenHeight(), 2);
-  Basket* cloud_lower = new_basket_cloud(&st.textures.cloud, 0.0f, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight(), 1);
-  Basket* birb = new_basket_pelican(&st.textures.pelican, true, CLOUD_LOWER_Y_PERCENTAGE*(f32)GetScreenHeight() + 40, 4);
-  cloud_lower->next = cloud_upper;
-  cloud_upper->next = birb;
-  st.baskets = cloud_lower;
-
+  State st = {0};
+  st.textures = init_textures();
+  st.debug_mode = debug_mode;
+  reset(&st);
+  printf("AAAAAAAAAA Baskets start at: %p\n", st.baskets);
   return st;
 }
 
@@ -86,11 +102,14 @@ void update(State* st) {
       handle_scoring_and_hp(st, DeltaTime);
       throw_laser(st);
       handle_laser_collisions(st);
-      update_slingshot_status(st, DeltaTime);
+      update_slingshot_cooldown(st, DeltaTime);
+      st->time_since_reset += DeltaTime;
+
       if (st->debug_mode && IsKeyPressed(KEY_L)) st->laser_cooldown = 0.0;
-
-      if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->slingshot_cooldown <= 0) summon_ball(st);
-
+      if (!IsMouseButtonDown(0)
+        && st->clicking_last_frame
+        && st->slingshot_cooldown <= 0
+        && st->time_since_reset > GRACE_TIME_UPON_RESET) summon_ball(st);
 
       handle_possible_loss(st);
 
@@ -100,7 +119,7 @@ void update(State* st) {
       char buf[] = "You've died :(";
       DrawText(buf,
         GetScreenWidth()/2 - MeasureText(buf, SCORE_FONTSIZE)/2,
-        GetScreenHeight()/2,
+        GetScreenHeight()/4,
         SCORE_FONTSIZE, WHITE);
       break;
     }
@@ -114,7 +133,7 @@ void update(State* st) {
 void render(State* st) {
   draw_laser(st);
   draw_score(st);
-  draw_slingshot(st); draw_slingshot_strings();
+  draw_slingshot(st); draw_slingshot_strings(st);
   draw_ready_ball(st);
   draw_sun(st);
 
@@ -126,6 +145,7 @@ void render(State* st) {
 
   Basket* basket = st->baskets;
   while (basket) {
+    printf("Drawing basket at: %p\n", basket);
     draw_basket(basket);
     if (st->debug_mode) draw_basket_hitbox(basket);
     basket = basket->next;
@@ -179,13 +199,17 @@ int main(i32 argc, char** argv) {
     DeltaTime = GetFrameTime();
     if (!st.paused) update(&st);
     if (IsKeyPressed(KEY_SPACE)) st.paused = !st.paused;
-    if (IsKeyPressed(KEY_D))     st.debug_mode = !st.debug_mode;
+
+    // DEBUG ONES
+    if (IsKeyPressed(KEY_D)) st.debug_mode = !st.debug_mode;
+    if (IsKeyPressed(KEY_M)) st.hp = 0;
+    // END DEBUG ONES
 
     BeginDrawing();
     ClearBackground(COLOR_BACKGROUND);
     render(&st);
+    if (st.status == S_Dead && show_reset_button()) reset(&st);
     EndDrawing();
-
   }
 
   CloseWindow();

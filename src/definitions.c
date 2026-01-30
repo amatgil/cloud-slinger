@@ -33,6 +33,7 @@ typedef struct Ball {
 typedef struct {
   Status status;
   bool debug_mode;
+  f32 time_since_reset;
   bool paused;
   Ball* balls;
   bool clicking_last_frame;
