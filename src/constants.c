@@ -37,7 +37,7 @@
 #define LASER_ORIGIN (Vector2){.x=30.0f, .y=47.0f}
 #define SUN_RADIUS 70
 
-#define GRACE_TIME_UPON_RESET 0.5f
+#define GRACE_TIME_UPON_RESET 0.6f
 
 #define SLINGSHOT_WIDTH 160
 #define SLINGSHOT_HEIGHT (SLINGSHOT_WIDTH * 1.14f)

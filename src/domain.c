@@ -8,6 +8,12 @@
 #include <assert.h>
 #include <stdio.h>
 
+// Whether inputs corresponding to slingshot control
+// Returns false when e.g. you've died or you're in a menu
+bool gaming_is_allowed(State* st) {
+  return st->time_since_reset > GRACE_TIME_UPON_RESET && st->status == S_Playing;
+}
+
 Vector2 get_slingshot_focus(void) {
   Vector2 anchor_base = SLINGSHOT_CENTER;
 

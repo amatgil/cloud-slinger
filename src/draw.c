@@ -67,7 +67,7 @@ void draw_slingshot_strings(State* st) {
   Vector2 anchor_right = (Vector2){ .x = x + dx, .y = y + dy };
   Vector2 anchor_unheld = (Vector2){ .x = x, .y = y+(f32)SLINGSHOT_MAX_RADIUS/2 };
 
-  if (!IsMouseButtonDown(0) || st->time_since_reset < GRACE_TIME_UPON_RESET) {
+  if (!IsMouseButtonDown(0) || !gaming_is_allowed(st)) {
     draw_slingshot_string(anchor_left, anchor_unheld);
     draw_slingshot_string(anchor_right, anchor_unheld);
     return;
@@ -96,7 +96,7 @@ void draw_ready_ball(State* st) {
     .vel_y = 0,
     .next  = NULL
   };
-  if (!IsMouseButtonDown(0)) {
+  if (!IsMouseButtonDown(0) || !gaming_is_allowed(st)) {
     b.x = (f32)SLINGSHOT_CENTER.x;
     b.y = SLINGSHOT_CENTER.y + SLINGSHOT_MAX_RADIUS/2.0f;
   };
