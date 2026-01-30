@@ -28,7 +28,7 @@ Textures init_textures(void) {
   };
 }
 
-// Assumes 'textures' is valid
+// Assumes 'textures' and 'font' are valid
 void reset(State* st) {
   assert(st != NULL);
   // Don't leak the memory lmfao
@@ -66,6 +66,7 @@ State init(bool debug_mode) {
   State st = {0};
   st.textures = init_textures();
   st.debug_mode = debug_mode;
+  st.font = LoadFontEx("../assets/Uiua386.ttf", SCORE_FONTSIZE, NULL, 0);
   reset(&st);
   return st;
 }
@@ -94,12 +95,12 @@ void update(State* st) {
   }
 
 
-  advance_laser(st, DeltaTime);
 
   switch (st->status) {
     case S_Playing: {
       handle_scoring_and_hp(st, DeltaTime);
       throw_laser(st);
+      advance_laser(st, DeltaTime);
       handle_laser_collisions(st);
       update_slingshot_cooldown(st, DeltaTime);
       st->time_since_reset += DeltaTime;
@@ -116,10 +117,12 @@ void update(State* st) {
     }
     case S_Dead: {
       char buf[] = "You've died :(";
-      DrawText(buf,
-        GetScreenWidth()/2 - MeasureText(buf, SCORE_FONTSIZE)/2,
-        GetScreenHeight()/4,
-        SCORE_FONTSIZE, WHITE);
+      DrawTextEx(st->font,
+        buf,
+        (Vector2){
+          .x = (f32)GetScreenWidth()/2 - MeasureTextEx(st->font, buf, SCORE_FONTSIZE, 0.0).x/2.0f,
+          .y = (f32)GetScreenHeight()/4},
+        SCORE_FONTSIZE, 0.0, WHITE);
       break;
     }
   }
@@ -206,7 +209,7 @@ int main(i32 argc, char** argv) {
     BeginDrawing();
     ClearBackground(COLOR_BACKGROUND);
     render(&st);
-    if (st.status == S_Dead && show_reset_button()) reset(&st);
+    if (st.status == S_Dead && reset_button(&st)) reset(&st);
     EndDrawing();
   }
 

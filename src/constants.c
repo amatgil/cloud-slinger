@@ -47,8 +47,8 @@
 #define SLINGSHOT_MAX_RADIUS 150
 #define SLINGSHOT_CENTER (Vector2){.x = (f32)GetScreenWidth()/2.0f, .y = (f32)GetScreenHeight()-SLINGSHOT_HEIGHT}
 
-#define SCORE_FONTSIZE  20
-#define SCORE_PADDING_Y 10
+#define SCORE_FONTSIZE  40
+#define SCORE_PADDING_Y 00
 
 #define GRAVITY_ACCELERATION 300
 #define BALL_MAXIMUM_INITIAL_SPEED 600.0f

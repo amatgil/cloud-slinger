@@ -42,6 +42,7 @@ typedef struct {
   f32 hp_decrease_vel;
   u32 score;
   f32 laser_angle, laser_magnitude, laser_cooldown; // Magnitude is NaN when no laser
+  Font font;
   Textures textures;
   Basket* baskets;
 } State ;

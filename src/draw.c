@@ -109,24 +109,32 @@ void draw_ready_ball(State* st) {
 // Assumes we're in drawing mode
 void draw_score(State* st) {
   assert(st != NULL);
-  u32 available_width = (u32)GetScreenWidth()-(u32)SUN_RADIUS;
+  f32 available_width = (f32)GetScreenWidth()-SUN_RADIUS;
 
   {
     char buf[256];
     sprintf(buf, "%0.0f", st->hp);
-    i32 width_hp = MeasureText(buf, SCORE_FONTSIZE);
-    DrawText(buf,
-      SUN_RADIUS + 1*available_width/4 - (u32)width_hp/2,
-      SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
+    f32 width_hp = (f32)MeasureTextEx(st->font, buf, SCORE_FONTSIZE, 0.0).x;
+    DrawTextEx(
+      st->font,
+      buf,
+      (Vector2){
+        .x = SUN_RADIUS + 2.0f*available_width/8.0f - width_hp/2.0f,
+        .y = SCORE_PADDING_Y },
+      SCORE_FONTSIZE, 0.0, RED);
   }
 
   {
     char buf[256];
     sprintf(buf, "%d", st->score);
-    i32 width_score = MeasureText(buf, SCORE_FONTSIZE);
-    DrawText(buf,
-      SUN_RADIUS + 5*available_width/8 - (u32)width_score/2,
-      SCORE_PADDING_Y, SCORE_FONTSIZE, WHITE);
+    f32 width_score = (f32)MeasureTextEx(st->font, buf, SCORE_FONTSIZE, 0.0).x;
+    DrawTextEx(
+      st->font,
+      buf,
+      (Vector2){
+        .x = SUN_RADIUS + 5.0f*available_width/8.0f - width_score/2.0f,
+        .y = SCORE_PADDING_Y},
+      SCORE_FONTSIZE, 0.0, BLUE);
   }
 }
 
