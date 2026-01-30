@@ -5,8 +5,10 @@ Please see the shell.nix for a list of dependencies (clang, a couple of x11 rela
 ** Usage
 #+BEGIN_SRC
 cd src/
-./compile.sh && ./main
+./build.nu && ./main
 #+END_SRC
+
+The script is written in =nushell=, so one needs it. The commands are trivial to run manually, however (it's just a single =clang= call), so installing it isn't really needed.
 
 *** Goal
 You have a certain amount of health, measured in seconds. When it hits zero, you lose. Score baskets while avoiding obstacles to gain more seconds and stay alive longer!
