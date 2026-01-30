@@ -93,9 +93,16 @@ void update(State* st) {
 
 
       handle_possible_loss(st);
+
+      break;
     }
     case S_Dead: {
-
+      char buf[] = "You've died :(";
+      DrawText(buf,
+        GetScreenWidth()/2 - MeasureText(buf, SCORE_FONTSIZE)/2,
+        GetScreenHeight()/2,
+        SCORE_FONTSIZE, WHITE);
+      break;
     }
   }
 

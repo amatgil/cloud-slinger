@@ -21,7 +21,7 @@
 #define BALL_RADIUS 8
 
 #define INITIAL_HP 50.0f
-#define INITIAL_HP_DECREASE_VEL -0.03f
+#define INITIAL_HP_DECREASE_VEL 0.0f
 #define     MAX_HP_DECREASE_VEL -1.0f
 #define         HP_DECREASE_ACC -0.02f
 

@@ -19,7 +19,7 @@ Vector2 get_slingshot_focus(void) {
 void handle_scoring_and_hp(State* st, f32 DeltaTime) {
   assert(st != NULL);
 
-  st->hp_decrease_vel  = MAX(st->hp_decrease_vel+DeltaTime*HP_DECREASE_ACC,
+  st->hp_decrease_vel  = MAX(st->hp_decrease_vel + DeltaTime*HP_DECREASE_ACC,
                              MAX_HP_DECREASE_VEL);
   st->hp              += DeltaTime * st->hp_decrease_vel;
 }
@@ -145,4 +145,6 @@ void handle_possible_loss(State* st) {
   assert(st != NULL);
 
   if (st->hp <= 0)  st->status = S_Dead;
+  st->hp = MAX(0, st->hp); // zero must go first
+                           // because 0 == -0 lmfao
 }
