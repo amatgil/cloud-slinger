@@ -79,18 +79,27 @@ void update(State* st) {
   }
 
 
-  {
-    handle_scoring_and_hp(st, DeltaTime);
-    throw_laser(st);
-    advance_laser(st, DeltaTime);
-    handle_laser_collisions(st);
-    if (st->debug_mode && IsKeyPressed(KEY_L)) st->laser_cooldown = 0.0;
+  advance_laser(st, DeltaTime);
+
+  switch (st->status) {
+    case S_Playing: {
+      handle_scoring_and_hp(st, DeltaTime);
+      throw_laser(st);
+      handle_laser_collisions(st);
+      update_slingshot_status(st, DeltaTime);
+      if (st->debug_mode && IsKeyPressed(KEY_L)) st->laser_cooldown = 0.0;
+
+      if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->slingshot_cooldown <= 0) summon_ball(st);
+
+
+      handle_possible_loss(st);
+    }
+    case S_Dead: {
+
+    }
   }
 
 
-  if (!IsMouseButtonDown(0) && st->clicking_last_frame && st->slingshot_cooldown <= 0) summon_ball(st);
-  st->slingshot_cooldown -= DeltaTime;
-  st->slingshot_cooldown = MAX(st->slingshot_cooldown, 0);
   st->clicking_last_frame = IsMouseButtonDown(0); // for next frame!
 }
 

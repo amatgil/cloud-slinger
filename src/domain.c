@@ -24,6 +24,13 @@ void handle_scoring_and_hp(State* st, f32 DeltaTime) {
   st->hp              += DeltaTime * st->hp_decrease_vel;
 }
 
+void update_slingshot_status(State* st, f32 DeltaTime) {
+  assert(st != NULL);
+
+  st->slingshot_cooldown -= DeltaTime;
+  st->slingshot_cooldown = MAX(st->slingshot_cooldown, 0);
+}
+
 void summon_ball(State* st) {
   assert(st != NULL);
 
@@ -61,10 +68,14 @@ void handle_ball_baskets_collisions(State* st) {
     if (ball->vel_y > 0) {
       while (basket) {
         if (ball_basket_collision(ball, basket)) {
-          if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with lower cloud\n", ball->x, ball->y, index);
-          st->score += basket->points;
-          st->hp += (f32)basket->points;
           remove_ball(st, index);
+          if (st->debug_mode) printf("Collision with ball (x=%f,y=%f,i=%d) with lower cloud\n", ball->x, ball->y, index);
+
+          if (st->status == S_Playing) {
+            st->score += basket->points;
+            st->hp += (f32)basket->points;
+          }
+
           return;
         }
         basket = basket->next;
@@ -128,4 +139,10 @@ void clear_errant_baskets(State* st) {
     index += 1;
   }
 
+}
+
+void handle_possible_loss(State* st) {
+  assert(st != NULL);
+
+  if (st->hp <= 0)  st->status = S_Dead;
 }

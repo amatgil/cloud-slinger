@@ -6,6 +6,11 @@
 #include "types.c"
 #include "baskets.c"
 
+typedef enum {
+  S_Playing,
+  S_Dead
+} Status ;
+
 typedef struct {
   Texture2D default_purple;
   Texture2D sun;
@@ -26,6 +31,7 @@ typedef struct Ball {
 } Ball;
 
 typedef struct {
+  Status status;
   bool debug_mode;
   bool paused;
   Ball* balls;
