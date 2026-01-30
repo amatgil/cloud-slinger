@@ -67,7 +67,6 @@ State init(bool debug_mode) {
   st.textures = init_textures();
   st.debug_mode = debug_mode;
   reset(&st);
-  printf("AAAAAAAAAA Baskets start at: %p\n", st.baskets);
   return st;
 }
 
@@ -145,7 +144,6 @@ void render(State* st) {
 
   Basket* basket = st->baskets;
   while (basket) {
-    printf("Drawing basket at: %p\n", basket);
     draw_basket(basket);
     if (st->debug_mode) draw_basket_hitbox(basket);
     basket = basket->next;
