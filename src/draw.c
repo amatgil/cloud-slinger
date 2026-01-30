@@ -112,21 +112,21 @@ void draw_score(State* st) {
   f32 available_width = (f32)GetScreenWidth()-SUN_RADIUS;
 
   {
-    char buf[256];
-    sprintf(buf, "%0.0f", st->hp);
+    char buf[256]; sprintf(buf, "%0.0f", st->hp);
     f32 width_hp = (f32)MeasureTextEx(st->font, buf, SCORE_FONTSIZE, 0.0).x;
+    Color col = {255, 70, 70, 255};
+    if (st->hp < 10) col = (Color){255, 0, 0, 255};
     DrawTextEx(
       st->font,
       buf,
       (Vector2){
         .x = SUN_RADIUS + 2.0f*available_width/8.0f - width_hp/2.0f,
         .y = SCORE_PADDING_Y },
-      SCORE_FONTSIZE, 0.0, RED);
+      SCORE_FONTSIZE, 0.0, col);
   }
 
   {
-    char buf[256];
-    sprintf(buf, "%d", st->score);
+    char buf[256]; sprintf(buf, "%d", st->score);
     f32 width_score = (f32)MeasureTextEx(st->font, buf, SCORE_FONTSIZE, 0.0).x;
     DrawTextEx(
       st->font,
