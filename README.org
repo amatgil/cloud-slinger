@@ -1,4 +1,7 @@
 * Cloud Slinger
+
+Please see the shell.nix for a list of dependencies (clang, a couple of x11 related libraries, and raylib, mostly).
+
 ** Usage
 #+BEGIN_SRC
 cd src/
