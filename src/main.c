@@ -108,7 +108,7 @@ void update(State* st) {
       if (!IsMouseButtonDown(0)
         && st->clicking_last_frame
         && st->slingshot_cooldown <= 0
-        && st->time_since_reset > GRACE_TIME_UPON_RESET) summon_ball(st);
+        && gaming_input_is_allowed(st)) summon_ball(st);
 
       handle_possible_loss(st);
 
