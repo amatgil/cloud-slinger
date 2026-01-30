@@ -4,9 +4,12 @@
 cd src/
 ./compile.sh && ./main
 #+END_SRC
-*** Flags
 
-- =-d=: Enable debug mode (shows hitboxes, mouse position, internal state, etc.)
+*** Goal
+You have a certain amount of health, measured in seconds. When it hits zero, you lose. Score baskets while avoiding obstacles to gain more seconds and stay alive longer!
+
+*** Execution flags
+- =-d=: Enable debug mode (shows hitboxes, mouse position, internal state, etc.). Toggleable ingame with =d=
 - =-w WIDTH=: Set screen width to =WIDTH=
 - =-h HEIGHT=: Set screen width to =HEIGHT=
 
@@ -18,10 +21,10 @@ cd src/
 
 ** Obstacles
 - The Sun: Randomly shoots lasers randomly (in any direction, from [0-..tau/4]). Lasers delete balls.
-- Asteriods: Every so often, a huge asteroid starts falling from the sky. Shoot balls at it to make it shrink in size. If, when it lands, it's too big, you go boom-boom and dead-dead. It also breaks baskets in its path. If it's small enough, however, it cna score in said baskets.
+- Asteroids: Every so often, a huge asteroid starts falling from the sky. Shoot balls at it to make it shrink in size. If, when it lands, it's too big, you go boom-boom and dead-dead. It also breaks baskets in its path. If it's small enough, however, it cna score in said baskets.
   A dinosaur will run around before the asteroid appears, as a warning. It will be in visible distress.
 
 ** Internals/"Documentation"
- Everything is stored in a =State= struct (which lives on the heap, just in case), including the textures (which are really IDs). Note that each instance of a of basket also holds a pointer to its texture (which lives in the State struct), for convenience when drawing them.
+ Everything is stored in a =State= struct (which lives on the heap, just in case), including the textures (which are really IDs; they're raylib's). Note that each instance of a basket also holds a pointer to its texture (which lives in the State struct), for convenience when drawing them.
 
-=Basket=s are implemented through a manual tagged union, and all collections (Balls and Baskets) are singly-linked lists (i didn't want to implement arrays, and they don't come default :pensive:). It's fun how you can just write such wildly unsafe code in C, I'm not used to this.
+=Basket=s are implemented through a manual tagged union, and all collections (Balls and Baskets) are singly-linked lists (i didn't want to implement arrays, and they don't come default in C :pensive:). It's fun how you can just write such wildly unsafe code in C, I'm not used to this.
