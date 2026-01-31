@@ -4,7 +4,7 @@ let libs = "-lraylib -lGL -lm -lpthread -ldl -lrt -lX11" | split row " "
 let flags = open ../compile_flags.txt | lines
 
 def main [] {
-  print "compile.sh: No subcommand given, running default (compile with debug settings)"
+  print "build.sh: No subcommand given, running default (compile with debug settings)"
   main build
 }
 

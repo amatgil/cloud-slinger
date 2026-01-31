@@ -11,6 +11,9 @@
 #include "sun.c"
 #include "domain.c"
 #include "dead.c"
+#if defined(PLATFORM_WEB)
+    #include <emscripten/emscripten.h>
+#endif
 
 f32 DeltaTime;
 i32 INITIAL_SCREEN_WIDTH  = 350;
@@ -182,6 +185,23 @@ void check_and_set_dim_from_args(i32 i, i32 argc, char** argv, const char* flag,
   }
 }
 
+void advance(State* st) {
+  DeltaTime = GetFrameTime();
+  if (!st->paused) update(st);
+  if (IsKeyPressed(KEY_SPACE)) st->paused = !st->paused;
+
+  // DEBUG ONES
+  if (IsKeyPressed(KEY_D)) st->debug_mode = !st->debug_mode;
+  if (IsKeyPressed(KEY_M)) st->hp = 0;
+  // END DEBUG ONES
+
+  BeginDrawing();
+  ClearBackground(COLOR_BACKGROUND);
+  render(st);
+  if (st->status == S_Dead && reset_button(st)) reset(st);
+  EndDrawing();
+}
+
 int main(i32 argc, char** argv) {
   bool debug_mode = false;
   for (i32 i = 1; i < argc; ++i) {
@@ -196,22 +216,7 @@ int main(i32 argc, char** argv) {
     printf("Initializing with width=%d and height=%d\n", INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT);
   }
 
-  while (!WindowShouldClose()) {
-    DeltaTime = GetFrameTime();
-    if (!st.paused) update(&st);
-    if (IsKeyPressed(KEY_SPACE)) st.paused = !st.paused;
-
-    // DEBUG ONES
-    if (IsKeyPressed(KEY_D)) st.debug_mode = !st.debug_mode;
-    if (IsKeyPressed(KEY_M)) st.hp = 0;
-    // END DEBUG ONES
-
-    BeginDrawing();
-    ClearBackground(COLOR_BACKGROUND);
-    render(&st);
-    if (st.status == S_Dead && reset_button(&st)) reset(&st);
-    EndDrawing();
-  }
+  while (!WindowShouldClose())  advance(&st);
 
   CloseWindow();
 

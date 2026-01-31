@@ -14,9 +14,9 @@ let
     xorg.libXi
     xorg.libXinerama
     xorg.libXrandr
-    #emscripten # web support
+    emscripten # web support
     clang
-    
+
     raylib
   ];
 in
